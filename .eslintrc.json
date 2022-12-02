@@ -1,0 +1,27 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "plugin:vue/vue3-recommended",
+    "standard-with-typescript",
+    "@vue/typescript/recommended"
+  ],
+  "overrides": [],
+  "parserOptions": {
+    "tsconfigRootDir": "./",
+    "project": [
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ],
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": [
+    "vue"
+  ],
+  "rules": {}
+}
