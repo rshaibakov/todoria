@@ -10,6 +10,7 @@
     "lint:script": "eslint --ext .ts,vue --ignore-path .gitignore .",
     "lint:style": "stylelint src/**/*.{css,vue}",
     "lint:type": "vue-tsc --pretty --noEmit",
+    "commit": "cz",
     "postinstall": "husky install",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable"
@@ -29,6 +30,8 @@
     "@typescript-eslint/parser": "^5.45.0",
     "@vitejs/plugin-vue": "^3.2.0",
     "@vue/eslint-config-typescript": "^11.0.2",
+    "commitizen": "^4.2.5",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.28.0",
     "eslint-config-standard-with-typescript": "latest",
     "eslint-plugin-import": "^2.25.2",
