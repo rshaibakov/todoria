@@ -44,6 +44,8 @@ const count = ref(0)
 
 <style scoped>
 .read-the-docs {
+  flex: 1 0;
+  width: 1px;
   color: #888;
 }
 </style>
