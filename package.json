@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "lint": "yarn lint:style && yarn lint:type && yarn lint:script",
     "lint:script": "eslint --ext .ts,vue --ignore-path .gitignore .",
     "lint:style": "stylelint src/**/*.{css,vue}",
     "lint:type": "vue-tsc --pretty --noEmit",
