@@ -1,0 +1,7 @@
+{
+  "src/**/*.{ts,tsx,vue}": [
+    "yarn lint:type",
+    "yarn lint:script"
+  ],
+  "src/**/*.{css,vue}": "yarn lint:style"
+}

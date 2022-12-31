@@ -1,12 +1,15 @@
 {
   "compilerOptions": {
     "composite": true,
-    "module": "ESNext",
+    "module": "NodeNext",
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "skipLibCheck": true
   },
   "include": [
-    "vite.config.ts"
+    "vite.config.ts",
+    "jest.config.ts",
+    "test/*"
   ]
 }
