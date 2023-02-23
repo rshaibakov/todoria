@@ -21,7 +21,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Install dependencies
-      run: yarn install --frozen-lockfile
+      run: yarn install
     - name: Semantic Release
       env:
         GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
