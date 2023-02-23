@@ -1,47 +1,27 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import { onMounted, ref, watchEffect } from 'vue'
+import { RouterView, useRouter } from 'vue-router'
+
+import { supabase } from './db'
+
+const router = useRouter()
+
+const session = ref()
+
+onMounted(async () => {
+  const { data } = await supabase.auth.getSession()
+  session.value = data.session
+
+  supabase.auth.onAuthStateChange((_, _session) => {
+    session.value = _session
+  })
+})
+
+watchEffect(async () => {
+  router.push(session.value ? '/' : '/auth')
+})
 </script>
 
 <template>
-  <div>
-    <a
-      data-test-id="app_logo-link"
-      href="https://vitejs.dev"
-      target="_blank"
-    >
-      <img
-        data-test-id="app_logo-image"
-        src="/vite.svg"
-        class="logo"
-        alt="Vite logo"
-      >
-    </a>
-    <a
-      href="https://vuejs.org/"
-      target="_blank"
-    >
-      <img
-        src="./assets/vue.svg"
-        class="logo vue"
-        alt="Vue logo"
-      >
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+  <RouterView />
 </template>
-
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-}
-
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
