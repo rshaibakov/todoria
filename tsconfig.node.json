@@ -5,11 +5,15 @@
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
     "strictNullChecks": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": [
+      "vitest/globals"
+    ]
   },
   "include": [
     "vite.config.ts",
-    "jest.config.ts",
+    "vitest.config.ts",
+    "src/**/*.d.ts",
     "test/*"
   ]
 }
