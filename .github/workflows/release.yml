@@ -20,9 +20,8 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-    - run: yarn set version berry
     - name: Install dependencies
-      run: yarn install --immutable --immutable-cache --check-cache
+      run: yarn install --frozen-lockfile
     - name: Semantic Release
       env:
         GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}

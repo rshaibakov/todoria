@@ -15,10 +15,7 @@
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "commit": "cz",
-    "release": "semantic-release",
-    "postinstall": "husky install",
-    "prepack": "pinst --disable",
-    "postpack": "pinst --enable"
+    "release": "semantic-release"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.8.0",
