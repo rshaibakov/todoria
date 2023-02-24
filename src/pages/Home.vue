@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { supabase } from '../db'
 import { ref } from 'vue'
+import router from '../router'
+import { useUserStore } from '../stores/user'
+
+const user = useUserStore()
 
 const hasLoading = ref(false)
 const message = ref('')
@@ -10,11 +13,13 @@ const signOut = async () => {
     hasLoading.value = true
     message.value = ''
 
-    const { error } = await supabase.auth.signOut()
+    const { error } = await user.signOut()
 
     if (error) {
       throw error
     }
+
+    router.push({ name: 'Auth' })
   } catch (error) {
     if (error instanceof Error) {
       message.value = error.message
