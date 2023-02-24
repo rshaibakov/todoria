@@ -1,19 +1,18 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { supabase } from '../db'
+import { useUserStore } from '../stores/user'
 
-const hasLoading = ref(false)
+const user = useUserStore()
+
 const email = ref('')
 const message = ref('')
 
 const signIn = async () => {
   try {
-    hasLoading.value = true
+    user.hasLoading = true
     message.value = ''
 
-    const { error } = await supabase.auth.signInWithOtp({
-      email: email.value
-    })
+    const { error } = await user.signIn(email.value)
 
     if (error) {
       throw error
@@ -25,7 +24,7 @@ const signIn = async () => {
       message.value = 'Произошла ошибка при отправлении ссылки. Попробуйте снова'
     }
   } finally {
-    hasLoading.value = false
+    user.hasLoading = false
   }
 }
 </script>
@@ -47,9 +46,9 @@ const signIn = async () => {
       <div>
         <button
           type="submit"
-          :disabled="hasLoading"
+          :disabled="user.hasLoading"
         >
-          {{ hasLoading ? 'Загрузка' : 'Получить ссылку' }}
+          {{ user.hasLoading ? 'Загрузка' : 'Получить ссылку' }}
         </button>
 
         <div v-if="message">

@@ -5,12 +5,11 @@ import { useUserStore } from '../stores/user'
 
 const user = useUserStore()
 
-const hasLoading = ref(false)
 const message = ref('')
 
 const signOut = async () => {
   try {
-    hasLoading.value = true
+    user.hasLoading = true
     message.value = ''
 
     const { error } = await user.signOut()
@@ -25,7 +24,7 @@ const signOut = async () => {
       message.value = error.message
     }
   } finally {
-    hasLoading.value = false
+    user.hasLoading = false
   }
 }
 </script>
@@ -33,10 +32,10 @@ const signOut = async () => {
 <template>
   <div>
     <button
-      :disabled="hasLoading"
+      :disabled="user.hasLoading"
       @click="signOut"
     >
-      Выйти
+      {{ user.hasLoading ? 'Загрузка' : 'Выйти' }}
     </button>
 
     <div v-if="message">

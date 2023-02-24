@@ -5,7 +5,12 @@ import { supabase } from '../db'
 
 export const useUserStore = defineStore('user', () => {
   const session = ref<Session | null>(null)
+  const hasLoading = ref(false)
   const isAuth = computed(() => session.value !== null)
+
+  const signIn = async (email: string) => {
+    return await supabase.auth.signInWithOtp({ email })
+  }
 
   const signOut = async () => {
     return await supabase.auth.signOut()
@@ -20,8 +25,10 @@ export const useUserStore = defineStore('user', () => {
 
   return {
     session,
+    hasLoading,
     isAuth,
-    checkAuth,
-    signOut
+    signIn,
+    signOut,
+    checkAuth
   }
 })
