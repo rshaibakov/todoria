@@ -2,7 +2,7 @@
 import { supabase } from '../db'
 import { ref } from 'vue'
 
-const hasLoading = ref(true)
+const hasLoading = ref(false)
 const message = ref('')
 
 const signOut = async () => {
