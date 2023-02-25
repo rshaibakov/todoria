@@ -32,6 +32,7 @@ const signOut = async () => {
 <template>
   <div>
     <button
+      class="button-primary"
       :disabled="user.hasLoading"
       @click="signOut"
     >

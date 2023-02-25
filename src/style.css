@@ -1,4 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
+  height: 100%;
   color: black;
   font-weight: 400;
   font-size: 16px;
@@ -10,4 +15,44 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-size-adjust: 100%;
+}
+
+#app,
+body {
+  height: 100%;
+}
+
+@layer components {
+  .h1 {
+    @apply
+      mb-4
+      text-4xl
+      font-bold;
+  }
+
+  .button-primary {
+    @apply
+      block
+      px-4 py-2
+      bg-blue-500
+      hover:bg-blue-700
+      text-white
+      font-bold
+      whitespace-nowrap
+      rounded;
+  }
+
+  .text-field {
+    @apply
+      block
+      w-full
+      px-4 py-2
+      rounded-md
+      border
+      border-solid
+      border-gray-300
+      focus:border-indigo-500
+      focus:ring-indigo-500
+      sm:text-sm;
+  }
 }
