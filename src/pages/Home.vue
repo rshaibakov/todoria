@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import router from '../router'
+import { useRouter } from 'vue-router'
 import { useUserStore } from '../stores/user'
 
+const router = useRouter()
 const user = useUserStore()
 
 const message = ref('')
@@ -32,6 +33,7 @@ const signOut = async () => {
 <template>
   <div>
     <button
+      data-test-id="sign-out-button"
       class="button-primary"
       :disabled="user.hasLoading"
       @click="signOut"
@@ -39,7 +41,10 @@ const signOut = async () => {
       {{ user.hasLoading ? 'Загрузка' : 'Выйти' }}
     </button>
 
-    <div v-if="message">
+    <div
+      v-if="message"
+      data-test-id="sign-out-message"
+    >
       {{ message }}
     </div>
   </div>
