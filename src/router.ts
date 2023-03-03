@@ -4,7 +4,7 @@ import Home from './pages/Home.vue'
 import Auth from './pages/Auth.vue'
 import { useUserStore } from './stores/user'
 
-const routes = [
+export const routes = [
   {
     path: '/',
     name: 'Home',
