@@ -5,7 +5,7 @@ import { useUserStore } from '../stores/user'
 const user = useUserStore()
 
 const email = ref('')
-const message = ref('Ссылка для входа отправлена на почту')
+const message = ref('')
 
 const signIn = async () => {
   try {
@@ -32,6 +32,7 @@ const signIn = async () => {
 <template>
   <section class="root">
     <form
+      data-test-id="auth-form"
       class="form"
       @submit.prevent="signIn"
     >
@@ -42,6 +43,7 @@ const signIn = async () => {
       <div class="fields">
         <input
           v-model="email"
+          data-test-id="auth-email-text-field"
           class="text-field"
           type="email"
           placeholder="Твой email"
@@ -49,6 +51,7 @@ const signIn = async () => {
         >
 
         <button
+          data-test-id="auth-submit"
           class="button-primary"
           type="submit"
           :disabled="user.hasLoading"
@@ -59,6 +62,7 @@ const signIn = async () => {
 
       <div
         v-if="message"
+        data-test-id="auth-message"
         class="message"
       >
         {{ message }}
