@@ -27,6 +27,7 @@ describe('Home', () => {
       beforeAll(() => {
         vi.spyOn(supabase.auth, 'signOut').mockResolvedValue({ error: null })
       })
+
       test('sign out button with loading displayed', async () => {
         const { getByTestId } = renderWithConfig(Home)
 
@@ -64,6 +65,7 @@ describe('Home', () => {
       beforeAll(() => {
         vi.spyOn(supabase.auth, 'signOut').mockResolvedValue({ error: new AuthError('This is error') })
       })
+
       test('sign out button displayed', async () => {
         const { getByTestId } = renderWithConfig(Home)
 
