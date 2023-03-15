@@ -8,6 +8,7 @@ export default mergeConfig(viteConfig, defineConfig({
     environment: 'happy-dom',
     includeSource: ['src/**/*.{ts,tsx,vue}'],
     globals: true,
+    // TODO: Удалить из покрытия ненужные файлы
     coverage: {
       provider: 'istanbul',
       reporter: ['text', 'json', 'html']
