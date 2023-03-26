@@ -10,7 +10,8 @@ export default mergeConfig(viteConfig, defineConfig({
     globals: true,
     coverage: {
       provider: 'istanbul',
-      reporter: ['text', 'json', 'html']
+      reporter: ['text', 'json', 'html'],
+      include: ['src/**/*.{tsx,vue}']
     }
   }
 }))

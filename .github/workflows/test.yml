@@ -3,8 +3,9 @@ on: [pull_request]
 
 jobs:
   test:
-
     runs-on: ubuntu-latest
+
+    environment: staging
 
     strategy:
       matrix:
@@ -16,6 +17,11 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
+    - name: Set enviroments
+      run: |
+        touch .env
+        echo VITE_SUPABASE_URL=${{ vars.VITE_SUPABASE_URL }} >> .env
+        echo VITE_SUPABASE_KEY=${{ vars.VITE_SUPABASE_KEY }} >> .env
     - name: Install dependencies
       run: yarn install
     - name: Lint
