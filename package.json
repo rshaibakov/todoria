@@ -15,7 +15,8 @@
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "commit": "cz",
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "update-types": "npx supabase gen types typescript --project-id \"$SUPABASE_PROJECT_ID\" > src/db.types.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.8.0",
