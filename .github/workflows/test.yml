@@ -12,14 +12,16 @@ jobs:
         node-version: [16.x]
 
     steps:
-    - name: Use variables
-      run: |
-        echo "repository variable : ${{ vars.VITE_SUPABASE_URL }}"
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
+    - name: Set enviroments
+      run: |
+        touch .env
+        echo VITE_SUPABASE_URL=${{ vars.VITE_SUPABASE_URL }} >> .env
+        echo VITE_SUPABASE_KEY=${{ vars.VITE_SUPABASE_KEY }} >> .env
     - name: Install dependencies
       run: yarn install
     - name: Lint
