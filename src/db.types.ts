@@ -37,28 +37,28 @@ export interface Database {
       }
       sprints: {
         Row: {
-          createdAt: string | null
-          finishAt: string | null
+          created_at: string | null
+          finish_at: string | null
           id: string
           number: number | null
-          startAt: string | null
-          userId: string | null
+          start_at: string | null
+          user_id: string | null
         }
         Insert: {
-          createdAt?: string | null
-          finishAt?: string | null
+          created_at?: string | null
+          finish_at?: string | null
           id?: string
           number?: number | null
-          startAt?: string | null
-          userId?: string | null
+          start_at?: string | null
+          user_id?: string | null
         }
         Update: {
-          createdAt?: string | null
-          finishAt?: string | null
+          created_at?: string | null
+          finish_at?: string | null
           id?: string
           number?: number | null
-          startAt?: string | null
-          userId?: string | null
+          start_at?: string | null
+          user_id?: string | null
         }
       }
     }
