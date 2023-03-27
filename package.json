@@ -55,6 +55,7 @@
     "eslint-plugin-vue": "latest",
     "happy-dom": "^8.7.2",
     "husky": "^8.0.0",
+    "msw": "^1.2.1",
     "postcss": "^8.4.21",
     "postcss-html": "^1.5.0",
     "pretty-format": "^29.3.1",
