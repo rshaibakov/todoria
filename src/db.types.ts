@@ -35,6 +35,32 @@ export interface Database {
           userId?: string
         }
       }
+      sprints: {
+        Row: {
+          createdAt: string | null
+          finishAt: string | null
+          id: string
+          number: number | null
+          startAt: string | null
+          userId: string | null
+        }
+        Insert: {
+          createdAt?: string | null
+          finishAt?: string | null
+          id?: string
+          number?: number | null
+          startAt?: string | null
+          userId?: string | null
+        }
+        Update: {
+          createdAt?: string | null
+          finishAt?: string | null
+          id?: string
+          number?: number | null
+          startAt?: string | null
+          userId?: string | null
+        }
+      }
     }
     Views: {
       [_ in never]: never
