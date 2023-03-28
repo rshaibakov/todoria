@@ -3,6 +3,8 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../stores/user'
 
+import CurrentSprint from '../features/CurrentSprint/CurrentSprint.vue'
+
 const router = useRouter()
 const user = useUserStore()
 
@@ -47,5 +49,7 @@ const signOut = async () => {
     >
       {{ message }}
     </div>
+
+    <CurrentSprint />
   </div>
 </template>
