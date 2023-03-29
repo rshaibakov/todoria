@@ -1,10 +1,10 @@
 import { describe, test, beforeAll, afterEach, afterAll } from 'vitest'
+import { waitFor } from '@testing-library/vue'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 import dayjs from 'dayjs'
 import { renderWithConfig } from '../../../test/setup'
 import CurrentSprint from './CurrentSprint.vue'
-import { waitFor } from '@testing-library/vue'
 
 // @ts-expect-error import.meta не может быть валидно прочитана TS в среде NodeJS
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
