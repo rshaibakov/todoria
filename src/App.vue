@@ -10,6 +10,8 @@ import { RouterView } from 'vue-router'
 
 <style scoped>
 .main {
+  @apply bg-slate-200;
+
   height: 100%;
 }
 </style>

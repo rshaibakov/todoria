@@ -5,6 +5,7 @@ import { renderWithConfig } from '../../test/setup'
 import { supabase } from '../db'
 import Auth from './Auth.vue'
 
+// TODO: Переделать мокирование запросов на msw
 describe('Auth', () => {
   afterEach(() => {
     vi.clearAllMocks()
