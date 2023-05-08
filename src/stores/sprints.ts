@@ -3,10 +3,10 @@ import { ref } from 'vue'
 import { supabase } from '../db'
 import { type Database } from '../db.types'
 
-export type Sprint = Database['public']['Tables']['sprints']['Row']
+export type TSprint = Database['public']['Tables']['sprints']['Row']
 
 export const useSprintsStore = defineStore('sprints', () => {
-  const currentSprint = ref<Sprint | null>(null)
+  const currentSprint = ref<TSprint | null>(null)
 
   const fetchCurrentSprint = async () => {
     const now = new Date()
