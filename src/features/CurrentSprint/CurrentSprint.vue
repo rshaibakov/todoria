@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount } from 'vue'
+import { computed, onBeforeMount } from 'vue'
 import { storeToRefs } from 'pinia'
 import dayjs from 'dayjs'
 import { useSprintsStore } from '../../stores/sprints'
@@ -7,9 +7,17 @@ import { useSprintsStore } from '../../stores/sprints'
 const store = useSprintsStore()
 const { currentSprint } = storeToRefs(store)
 
-const formatDate = 'ddd, D MMMM'
-const startAt = dayjs(currentSprint.value?.start_at).format(formatDate)
-const finishAt = dayjs(currentSprint.value?.finish_at).format(formatDate)
+const sourceDateFormat = 'YYYY-MM-DD'
+const displayedDateFormat = 'ddd, D MMMM'
+const duration = computed(() => {
+  if (!currentSprint.value) {
+    return ''
+  }
+
+  const startAt = dayjs(currentSprint.value.start_at, sourceDateFormat).format(displayedDateFormat)
+  const finishAt = dayjs(currentSprint.value.finish_at, sourceDateFormat).format(displayedDateFormat)
+  return `${startAt} - ${finishAt}`
+})
 
 onBeforeMount(() => {
   store.fetchCurrentSprint()
@@ -19,8 +27,11 @@ onBeforeMount(() => {
 <template>
   <div class="current-sprint">
     <section class="summary">
-      <header class="duration">
-        {{ startAt }} - {{ finishAt }}
+      <header
+        class="duration"
+        data-test-id="current-sprint-duration"
+      >
+        {{ duration }}
       </header>
     </section>
 
