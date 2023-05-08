@@ -9,7 +9,33 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      oneTimeTasks: {
+      sprints: {
+        Row: {
+          created_at: string | null
+          finish_at: string | null
+          id: string
+          number: number | null
+          start_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          finish_at?: string | null
+          id?: string
+          number?: number | null
+          start_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          finish_at?: string | null
+          id?: string
+          number?: number | null
+          start_at?: string | null
+          user_id?: string | null
+        }
+      }
+      tasks: {
         Row: {
           createdAt: string | null
           description: string | null
