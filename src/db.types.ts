@@ -37,28 +37,34 @@ export interface Database {
       }
       tasks: {
         Row: {
-          createdAt: string | null
+          created_at: string | null
           description: string | null
-          expirationAt: string | null
           id: string
+          is_done: boolean | null
           name: string
-          userId: string
+          planned_at: string | null
+          sprint_id: string | null
+          user_id: string
         }
         Insert: {
-          createdAt?: string | null
+          created_at?: string | null
           description?: string | null
-          expirationAt?: string | null
           id?: string
+          is_done?: boolean | null
           name: string
-          userId: string
+          planned_at?: string | null
+          sprint_id?: string | null
+          user_id: string
         }
         Update: {
-          createdAt?: string | null
+          created_at?: string | null
           description?: string | null
-          expirationAt?: string | null
           id?: string
+          is_done?: boolean | null
           name?: string
-          userId?: string
+          planned_at?: string | null
+          sprint_id?: string | null
+          user_id?: string
         }
       }
     }
