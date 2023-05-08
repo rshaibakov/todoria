@@ -42,14 +42,12 @@ describe('CurrentSprint', () => {
     server.close()
   })
 
-  test('days displayed', async () => {
-    const { getAllByTestId } = renderWithConfig(CurrentSprint)
+  test('duration displayed', async () => {
+    const { getByTestId } = renderWithConfig(CurrentSprint)
 
     await waitFor(() => {
-      const currentSprintDays = getAllByTestId('current-sprint-day')
-      expect(currentSprintDays).toHaveLength(14)
-      expect(currentSprintDays[0]).toHaveTextContent(startAt.format('MMM D, YYYY'))
-      expect(currentSprintDays[currentSprintDays.length - 1]).toHaveTextContent(finishAt.format('MMM D, YYYY'))
+      const currentSprintDuration = getByTestId('current-sprint-duration')
+      expect(currentSprintDuration).toHaveTextContent(`${startAt.format('ddd, D MMMM')} - ${finishAt.format('ddd, D MMMM')}`)
     })
   })
 })
