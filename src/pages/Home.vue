@@ -33,23 +33,46 @@ const signOut = async () => {
 </script>
 
 <template>
-  <div>
-    <button
-      data-test-id="sign-out-button"
-      class="button-primary"
-      :disabled="user.hasLoading"
-      @click="signOut"
-    >
-      {{ user.hasLoading ? 'Загрузка' : 'Выйти' }}
-    </button>
+  <div class="root">
+    <header class="header">
+      <button
+        data-test-id="sign-out-button"
+        class="button-primary"
+        :disabled="user.hasLoading"
+        @click="signOut"
+      >
+        {{ user.hasLoading ? 'Загрузка' : 'Выйти' }}
+      </button>
 
-    <div
-      v-if="message"
-      data-test-id="sign-out-message"
-    >
-      {{ message }}
-    </div>
+      <div
+        v-if="message"
+        data-test-id="sign-out-message"
+      >
+        {{ message }}
+      </div>
+    </header>
 
-    <CurrentSprint />
+    <CurrentSprint class="current-sprint" />
   </div>
 </template>
+
+<style scoped>
+.root {
+  @apply
+    grid
+    h-full;
+
+  grid-template-areas:
+    "header"
+    "current-sprint";
+  grid-template-rows: 56px 1fr;
+}
+
+.header {
+  grid-area: header;
+}
+
+.current-sprint {
+  grid-area: current-sprint;
+}
+</style>
