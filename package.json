@@ -19,7 +19,7 @@
     "update-types": "npx supabase gen types typescript --project-id \"$SUPABASE_PROJECT_ID\" > src/db.types.ts"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.8.0",
+    "@supabase/supabase-js": "^2.21.0",
     "dayjs": "^1.11.7",
     "pinia": "^2.0.32",
     "vue": "^3.2.41",
