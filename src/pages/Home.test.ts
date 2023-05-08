@@ -5,6 +5,7 @@ import { renderWithConfig } from '../../test/setup'
 import Home from './Home.vue'
 import { AuthError } from '@supabase/supabase-js'
 
+// TODO: Переделать мокирование запросов на msw
 describe('Home', () => {
   afterEach(() => {
     vi.clearAllMocks()
