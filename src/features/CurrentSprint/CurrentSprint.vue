@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeMount } from 'vue'
+import { onBeforeMount } from 'vue'
 import { storeToRefs } from 'pinia'
 import dayjs from 'dayjs'
 import { useSprintsStore } from '../../stores/sprints'
@@ -7,22 +7,9 @@ import { useSprintsStore } from '../../stores/sprints'
 const store = useSprintsStore()
 const { currentSprint } = storeToRefs(store)
 
-const days = computed(() => {
-  if (!currentSprint.value) {
-    return []
-  }
-
-  const startAt = dayjs(currentSprint.value?.start_at)
-  const finishAt = dayjs(currentSprint.value?.finish_at)
-  const diffDays = finishAt.diff(startAt, 'day')
-  const days = []
-
-  for (let i = 0; i <= diffDays; i++) {
-    days.push(startAt.add(i, 'day').format('MMM D, YYYY'))
-  }
-
-  return days
-})
+const formatDate = 'ddd, D MMMM'
+const startAt = dayjs(currentSprint.value?.start_at).format(formatDate)
+const finishAt = dayjs(currentSprint.value?.finish_at).format(formatDate)
 
 onBeforeMount(() => {
   store.fetchCurrentSprint()
@@ -30,13 +17,42 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <section class="current-sprint">
-    <header>{{ currentSprint?.number }}</header>
-  </section>
+  <div class="current-sprint">
+    <section class="summary">
+      <header class="duration">
+        {{ startAt }} - {{ finishAt }}
+      </header>
+    </section>
+
+    <section class="timeline" />
+  </div>
 </template>
 
 <style scoped>
 .current-sprint {
-  position: relative;
+  @apply
+    grid;
+
+  grid-template-areas: "summary timeline";
+  grid-template-columns: 480px 1fr;
+}
+
+.summary {
+  @apply
+    px-5
+    py-3;
+}
+
+.duration {
+  @apply
+    text-xl
+    font-semibold
+    capitalize;
+
+  grid-area: summary;
+}
+
+.timeline {
+  grid-area: timeline;
 }
 </style>
