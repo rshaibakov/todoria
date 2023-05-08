@@ -61,32 +61,6 @@ export interface Database {
           userId?: string
         }
       }
-      sprints: {
-        Row: {
-          created_at: string | null
-          finish_at: string | null
-          id: string
-          number: number | null
-          start_at: string | null
-          user_id: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          finish_at?: string | null
-          id?: string
-          number?: number | null
-          start_at?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          finish_at?: string | null
-          id?: string
-          number?: number | null
-          start_at?: string | null
-          user_id?: string | null
-        }
-      }
     }
     Views: {
       [_ in never]: never
