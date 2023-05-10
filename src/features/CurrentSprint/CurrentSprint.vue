@@ -3,7 +3,7 @@ import { onBeforeMount, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useSprintsStore } from '../../stores/sprints'
 import { useTasksStore } from '../../stores/tasks'
-import CurrentSprintSummary from './CurrentSprintSummary.vue'
+import * as CurrentSprint from './components'
 
 const sprintsStore = useSprintsStore()
 const tasksStore = useTasksStore()
@@ -25,7 +25,7 @@ watch(currentSprint, (currentSprint) => {
 
 <template>
   <div class="current-sprint">
-    <CurrentSprintSummary class="summary" />
+    <CurrentSprint.Summary class="summary" />
 
     <section class="timeline" />
   </div>

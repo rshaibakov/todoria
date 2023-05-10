@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import dayjs from 'dayjs'
-import { TTask } from '../../stores/tasks'
+import { TTask } from '../../../stores/tasks'
 
 const props = defineProps<{ task: TTask }>()
 
