@@ -1,39 +1,31 @@
 <script setup lang="ts">
-import { computed, onBeforeMount } from 'vue'
+import { onBeforeMount, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import dayjs from 'dayjs'
 import { useSprintsStore } from '../../stores/sprints'
+import { useTasksStore } from '../../stores/tasks'
+import * as CurrentSprint from './components'
 
-const store = useSprintsStore()
-const { currentSprint } = storeToRefs(store)
+const sprintsStore = useSprintsStore()
+const tasksStore = useTasksStore()
 
-const sourceDateFormat = 'YYYY-MM-DD'
-const displayedDateFormat = 'ddd, D MMMM'
-const duration = computed(() => {
-  if (!currentSprint.value) {
-    return ''
-  }
-
-  const startAt = dayjs(currentSprint.value.start_at, sourceDateFormat).format(displayedDateFormat)
-  const finishAt = dayjs(currentSprint.value.finish_at, sourceDateFormat).format(displayedDateFormat)
-  return `${startAt} - ${finishAt}`
-})
+const { currentSprint } = storeToRefs(sprintsStore)
 
 onBeforeMount(() => {
-  store.fetchCurrentSprint()
+  sprintsStore.fetchCurrentSprint()
+})
+
+watch(currentSprint, (currentSprint) => {
+  if (!currentSprint) {
+    return
+  }
+
+  tasksStore.fetchTasksBySprint(currentSprint.id)
 })
 </script>
 
 <template>
   <div class="current-sprint">
-    <section class="summary">
-      <header
-        class="duration"
-        data-test-id="current-sprint-duration"
-      >
-        {{ duration }}
-      </header>
-    </section>
+    <CurrentSprint.Summary class="summary" />
 
     <section class="timeline" />
   </div>
@@ -49,17 +41,6 @@ onBeforeMount(() => {
 }
 
 .summary {
-  @apply
-    px-5
-    py-3;
-}
-
-.duration {
-  @apply
-    text-xl
-    font-semibold
-    capitalize;
-
   grid-area: summary;
 }
 
