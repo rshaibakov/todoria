@@ -1,3 +1,11 @@
+# [1.1.0](https://github.com/rshaibakov/todoria/compare/v1.0.0...v1.1.0) (2023-05-11)
+
+
+### Features
+
+* **store:** add store for tasks ([2e30caf](https://github.com/rshaibakov/todoria/commit/2e30caf33ba5562db01c3f3a8a614199fa2a223f))
+* **tasks:** display tasks ([1acc951](https://github.com/rshaibakov/todoria/commit/1acc951938470922eda1c93b06df5ef237c48cca))
+
 # 1.0.0 (2023-05-08)
 
 
