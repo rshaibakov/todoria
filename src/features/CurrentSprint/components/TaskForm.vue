@@ -6,9 +6,13 @@
     <input
       class="text-field"
       type="text"
+      placeholder="Название"
     >
 
-    <textarea class="text-field" />
+    <textarea
+      class="text-field"
+      placeholder="Описание"
+    />
 
     <input
       class="text-field"
