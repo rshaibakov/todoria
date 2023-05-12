@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import dayjs from 'dayjs'
 import { useSprintsStore } from '../../../stores/sprints'
@@ -22,6 +22,10 @@ const duration = computed(() => {
 
 const tasksStore = useTasksStore()
 const { tasks } = storeToRefs(tasksStore)
+const hasOpenedTaskForm = ref(false)
+const openTaskForm = () => {
+  hasOpenedTaskForm.value = true
+}
 </script>
 
 <template>
@@ -39,12 +43,17 @@ const { tasks } = storeToRefs(tasksStore)
       </h3>
 
       <div class="actions">
-        <button class="button button-primary button-sm">
+        <button
+          class="button button-primary button-sm"
+          @click="openTaskForm"
+        >
           Добавить задачу
         </button>
       </div>
 
       <ul class="items">
+        <CurrentSprint.TaskForm v-if="hasOpenedTaskForm" />
+
         <CurrentSprint.Task
           v-for="task in tasks"
           :key="task.id"
