@@ -38,6 +38,12 @@ const { tasks } = storeToRefs(tasksStore)
         Задачи
       </h3>
 
+      <div class="actions">
+        <button class="button button-primary button-sm">
+          Добавить задачу
+        </button>
+      </div>
+
       <ul class="items">
         <CurrentSprint.Task
           v-for="task in tasks"
@@ -66,8 +72,30 @@ const { tasks } = storeToRefs(tasksStore)
   grid-area: summary;
 }
 
+.group {
+  @apply
+    grid
+    py-2;
+
+  grid-template: 1fr auto / 1fr;
+  grid-template-areas:
+    "caption actions"
+    "items items";
+}
+
 .caption {
   @apply
+    mb-2
     text-lg;
+
+  grid-area: caption;
+}
+
+.actions {
+  grid-area: actions;
+}
+
+.items {
+  grid-area: items;
 }
 </style>
