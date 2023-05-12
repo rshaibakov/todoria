@@ -52,7 +52,7 @@ const signIn = async () => {
 
         <button
           data-test-id="auth-submit"
-          class="button-primary"
+          class="button-md button-primary"
           type="submit"
           :disabled="user.hasLoading"
         >
