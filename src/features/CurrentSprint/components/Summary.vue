@@ -23,8 +23,8 @@ const duration = computed(() => {
 const tasksStore = useTasksStore()
 const { tasks } = storeToRefs(tasksStore)
 const hasOpenedTaskForm = ref(false)
-const openTaskForm = () => {
-  hasOpenedTaskForm.value = true
+const toggleTaskForm = (isOpened: boolean) => {
+  hasOpenedTaskForm.value = isOpened
 }
 </script>
 
@@ -45,14 +45,17 @@ const openTaskForm = () => {
       <div class="actions">
         <button
           class="button button-primary button-sm"
-          @click="openTaskForm"
+          @click="toggleTaskForm(true)"
         >
           Добавить задачу
         </button>
       </div>
 
       <ul class="items">
-        <CurrentSprint.TaskForm v-if="hasOpenedTaskForm" />
+        <CurrentSprint.TaskForm
+          v-if="hasOpenedTaskForm"
+          @cancel="toggleTaskForm(false)"
+        />
 
         <CurrentSprint.Task
           v-for="task in tasks"

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const emit = defineEmits(['cancel'])
 </script>
 
 <template>
@@ -19,12 +20,22 @@
       type="date"
     >
 
-    <button
-      class="button button-sm button-primary"
-      type="submit"
-    >
-      Добавить
-    </button>
+    <footer class="actions">
+      <button
+        class="button button-sm"
+        type="button"
+        @click="emit('cancel')"
+      >
+        Отмена
+      </button>
+
+      <button
+        class="button button-sm button-primary"
+        type="submit"
+      >
+        Добавить
+      </button>
+    </footer>
   </form>
 </template>
 
@@ -37,5 +48,11 @@
     gap-4
     bg-white
     rounded;
+}
+
+.actions {
+  @apply
+    flex
+    justify-end;
 }
 </style>
