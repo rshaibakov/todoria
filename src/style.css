@@ -33,13 +33,24 @@ body {
   .button-primary {
     @apply
       block
-      px-4 py-2
       bg-blue-500
       hover:bg-blue-700
       text-white
       font-bold
       whitespace-nowrap
       rounded;
+  }
+
+  .button-sm {
+    @apply
+      px-4 py-1
+      text-sm;
+  }
+
+  .button-md {
+    @apply
+      px-5 py-2
+      text-base;
   }
 
   .text-field {
