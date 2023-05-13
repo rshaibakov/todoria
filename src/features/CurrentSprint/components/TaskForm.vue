@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useTasksStore } from '../../../stores/tasks'
 
-const emit = defineEmits(['cancel'])
+const emit = defineEmits(['cancel', 'createdTask'])
 
 const { createTaskByCurrentSprint } = useTasksStore()
 
@@ -10,23 +10,26 @@ const nameField = ref<HTMLInputElement | null>(null)
 const descriptionField = ref<HTMLTextAreaElement | null>(null)
 const dateField = ref<HTMLInputElement | null>(null)
 
-const handleSubmit = () => {
+const onSubmit = async () => {
   if (!nameField.value) {
     return
   }
 
-  createTaskByCurrentSprint({
+  // TODO: Добавить обработку ошибок
+  await createTaskByCurrentSprint({
     name: nameField.value.value,
-    description: descriptionField.value?.value
-    // plannedAt: dateField.value?.value,
+    description: descriptionField.value?.value,
+    planned_at: dateField.value?.value || null
   })
+
+  emit('createdTask')
 }
 </script>
 
 <template>
   <form
     class="form"
-    @submit.prevent="handleSubmit"
+    @submit.prevent="onSubmit"
   >
     <input
       ref="nameField"
@@ -43,7 +46,7 @@ const handleSubmit = () => {
     />
 
     <input
-      ref="dateFiled"
+      ref="dateField"
       class="text-field"
       type="date"
     >

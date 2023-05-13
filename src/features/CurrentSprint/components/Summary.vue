@@ -55,6 +55,7 @@ const toggleTaskForm = (isOpened: boolean) => {
         <CurrentSprint.TaskForm
           v-if="hasOpenedTaskForm"
           @cancel="toggleTaskForm(false)"
+          @created-task="toggleTaskForm(false)"
         />
 
         <CurrentSprint.Task

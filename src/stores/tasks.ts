@@ -11,7 +11,7 @@ export type TTaskPayload = Pick<TNewTask, 'name' | 'description' | 'planned_at' 
 export type TSprintId = Database['public']['Tables']['sprints']['Row']['id']
 
 export const useTasksStore = defineStore('tasks', () => {
-  const tasks = ref<TTask[] | null>(null)
+  const tasks = ref<TTask[]>([])
 
   const fetchTasksBySprint = async (sprintId: TSprintId) => {
     const { data, error } = await supabase.from('tasks')
@@ -33,16 +33,21 @@ export const useTasksStore = defineStore('tasks', () => {
     }
 
     const { data, error } = await supabase.from('tasks')
-      .insert([{
+      .insert({
         ...task,
         user_id: userStore.user.id
-      }])
+      })
+      .select()
 
     if (error !== null) {
       throw Error(error.message)
     }
 
-    console.log(data)
+    if (data === null) {
+      throw Error('Not response with data by new task')
+    }
+
+    return data[0]
   }
 
   const sprintStore = useSprintsStore()
@@ -52,10 +57,12 @@ export const useTasksStore = defineStore('tasks', () => {
       throw Error('Sprint not found')
     }
 
-    await createTask({
+    const newTask = await createTask({
       ...task,
       sprint_id: sprintStore.currentSprint.id
     })
+
+    tasks.value.push(newTask)
   }
 
   return {
