@@ -33,6 +33,12 @@ const taskPlannedAt = computed(() => props.task.planned_at && dayjs(props.task.p
     py-1;
 }
 
+.task + .task {
+  @apply
+    border-t
+    border-slate-300;
+}
+
 .primary {
   @apply
     w-full
