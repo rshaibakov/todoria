@@ -17,6 +17,8 @@ export const useTasksStore = defineStore('tasks', () => {
     const { data, error } = await supabase.from('tasks')
       .select()
       .eq('sprint_id', sprintId)
+      .order('planned_at', { ascending: true, nullsFirst: true })
+      .order('created_at', { ascending: false })
 
     if (error !== null) {
       throw Error(error.message)
@@ -62,7 +64,25 @@ export const useTasksStore = defineStore('tasks', () => {
       sprint_id: sprintStore.currentSprint.id
     })
 
-    tasks.value.push(newTask)
+    if (newTask.planned_at !== null) {
+      tasks.value = [newTask, ...tasks.value].sort((a, b) => {
+        if (a.planned_at !== null && b.planned_at !== null) {
+          return a.planned_at > b.planned_at ? 1 : -1
+        }
+
+        if (a.planned_at === null && b.planned_at !== null) {
+          return -1
+        }
+
+        if (a.planned_at !== null && b.planned_at === null) {
+          return 1
+        }
+
+        return 0
+      })
+    } else {
+      tasks.value = [newTask, ...tasks.value]
+    }
   }
 
   return {
