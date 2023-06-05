@@ -12,6 +12,6 @@ import { RouterView } from 'vue-router'
 .main {
   @apply bg-slate-200;
 
-  height: 100%;
+  min-height: 100vh;
 }
 </style>
