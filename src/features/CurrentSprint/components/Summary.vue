@@ -45,6 +45,7 @@ const toggleTaskForm = (isOpened: boolean) => {
       <div class="actions">
         <button
           class="button button-primary button-sm"
+          data-test-id="current-sprint-task-add-button"
           @click="toggleTaskForm(true)"
         >
           Добавить задачу

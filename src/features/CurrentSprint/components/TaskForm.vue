@@ -29,6 +29,7 @@ const onSubmit = async () => {
 <template>
   <form
     class="form"
+    data-test-id="current-sprint-task-form"
     @submit.prevent="onSubmit"
   >
     <input
@@ -48,12 +49,14 @@ const onSubmit = async () => {
     <input
       ref="dateField"
       class="text-field"
+      data-test-id="current-sprint-planned-at-field"
       type="date"
     >
 
     <footer class="actions">
       <button
         class="button button-sm"
+        data-test-id="current-sprint-cancel-button"
         type="button"
         @click="emit('cancel')"
       >
@@ -62,6 +65,7 @@ const onSubmit = async () => {
 
       <button
         class="button button-sm button-primary"
+        data-test-id="current-sprint-submit-button"
         type="submit"
       >
         Добавить
