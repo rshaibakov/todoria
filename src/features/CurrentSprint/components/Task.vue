@@ -5,7 +5,7 @@ import { TTask } from '../../../stores/tasks'
 
 const props = defineProps<{ task: TTask }>()
 
-const taskPlannedAt = computed(() => dayjs(props.task.planned_at).format('ddd, D MMMM'))
+const taskPlannedAt = computed(() => props.task.planned_at && dayjs(props.task.planned_at).format('ddd, D MMMM'))
 </script>
 
 <template>
@@ -31,6 +31,12 @@ const taskPlannedAt = computed(() => dayjs(props.task.planned_at).format('ddd, D
   @apply
     px-2
     py-1;
+}
+
+.task + .task {
+  @apply
+    border-t
+    border-slate-300;
 }
 
 .primary {

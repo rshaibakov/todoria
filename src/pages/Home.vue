@@ -37,7 +37,7 @@ const signOut = async () => {
     <header class="header">
       <button
         data-test-id="sign-out-button"
-        class="button-primary"
+        class="button-primary button-md"
         :disabled="user.hasLoading"
         @click="signOut"
       >

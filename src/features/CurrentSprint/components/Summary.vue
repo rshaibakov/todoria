@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import dayjs from 'dayjs'
 import { useSprintsStore } from '../../../stores/sprints'
@@ -22,6 +22,10 @@ const duration = computed(() => {
 
 const tasksStore = useTasksStore()
 const { tasks } = storeToRefs(tasksStore)
+const hasOpenedTaskForm = ref(false)
+const toggleTaskForm = (isOpened: boolean) => {
+  hasOpenedTaskForm.value = isOpened
+}
 </script>
 
 <template>
@@ -38,7 +42,23 @@ const { tasks } = storeToRefs(tasksStore)
         Задачи
       </h3>
 
+      <div class="actions">
+        <button
+          class="button button-primary button-sm"
+          data-test-id="current-sprint-task-add-button"
+          @click="toggleTaskForm(true)"
+        >
+          Добавить задачу
+        </button>
+      </div>
+
       <ul class="items">
+        <CurrentSprint.TaskForm
+          v-if="hasOpenedTaskForm"
+          @cancel="toggleTaskForm(false)"
+          @created-task="toggleTaskForm(false)"
+        />
+
         <CurrentSprint.Task
           v-for="task in tasks"
           :key="task.id"
@@ -66,8 +86,30 @@ const { tasks } = storeToRefs(tasksStore)
   grid-area: summary;
 }
 
+.group {
+  @apply
+    grid
+    py-2;
+
+  grid-template: 1fr auto / 1fr;
+  grid-template-areas:
+    "caption actions"
+    "items items";
+}
+
 .caption {
   @apply
+    mb-2
     text-lg;
+
+  grid-area: caption;
+}
+
+.actions {
+  grid-area: actions;
+}
+
+.items {
+  grid-area: items;
 }
 </style>

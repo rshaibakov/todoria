@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  height: 100%;
+  min-height: 100%;
   color: black;
   font-weight: 400;
   font-size: 16px;
@@ -17,11 +17,6 @@
   text-size-adjust: 100%;
 }
 
-#app,
-body {
-  height: 100%;
-}
-
 @layer components {
   .h1 {
     @apply
@@ -33,13 +28,24 @@ body {
   .button-primary {
     @apply
       block
-      px-4 py-2
       bg-blue-500
       hover:bg-blue-700
       text-white
       font-bold
       whitespace-nowrap
       rounded;
+  }
+
+  .button-sm {
+    @apply
+      px-4 py-1
+      text-sm;
+  }
+
+  .button-md {
+    @apply
+      px-5 py-2
+      text-base;
   }
 
   .text-field {
