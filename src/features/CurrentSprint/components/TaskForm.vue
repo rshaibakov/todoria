@@ -1,28 +1,40 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useTasksStore } from '../../../stores/tasks'
+import { computed, ref } from 'vue'
+import dayjs from 'dayjs'
+import { TTask, useTasksStore } from '../../../stores/tasks'
 
-const emit = defineEmits(['cancel', 'createdTask'])
+const props = defineProps<{ task?: TTask }>()
 
-const { createTaskByCurrentSprint } = useTasksStore()
+const emit = defineEmits(['cancel', 'saved'])
+
+const { createTaskByCurrentSprint, updateTask } = useTasksStore()
 
 const nameField = ref<HTMLInputElement | null>(null)
 const descriptionField = ref<HTMLTextAreaElement | null>(null)
 const dateField = ref<HTMLInputElement | null>(null)
 
-const onSubmit = async () => {
+const taskPlannedAt = computed(() => props.task?.planned_at && dayjs(props.task?.planned_at).format('YYYY-MM-DD'))
+
+const onSubmit = () => {
   if (!nameField.value) {
     return
   }
 
-  // TODO: Добавить обработку ошибок
-  await createTaskByCurrentSprint({
-    name: nameField.value.value,
-    description: descriptionField.value?.value,
-    planned_at: dateField.value?.value || null
-  })
+  if (props.task !== undefined) {
+    updateTask(props.task.id, {
+      name: nameField.value.value,
+      description: descriptionField.value?.value,
+      planned_at: dateField.value?.value || null
+    })
+  } else {
+    createTaskByCurrentSprint({
+      name: nameField.value.value,
+      description: descriptionField.value?.value,
+      planned_at: dateField.value?.value || null
+    })
+  }
 
-  emit('createdTask')
+  emit('saved')
 }
 </script>
 
@@ -35,6 +47,7 @@ const onSubmit = async () => {
     <input
       ref="nameField"
       class="text-field"
+      :value="props.task?.name || ''"
       type="text"
       placeholder="Название"
       required
@@ -43,6 +56,7 @@ const onSubmit = async () => {
     <textarea
       ref="descriptionField"
       class="text-field"
+      :value="props.task?.description || ''"
       placeholder="Описание"
     />
 
@@ -50,6 +64,7 @@ const onSubmit = async () => {
       ref="dateField"
       class="text-field"
       data-test-id="current-sprint-planned-at-field"
+      :value="taskPlannedAt || ''"
       type="date"
     >
 
@@ -58,7 +73,7 @@ const onSubmit = async () => {
         class="button button-sm"
         data-test-id="current-sprint-cancel-button"
         type="button"
-        @click="emit('cancel')"
+        @click.stop="emit('cancel')"
       >
         Отмена
       </button>

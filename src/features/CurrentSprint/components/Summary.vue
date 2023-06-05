@@ -4,6 +4,7 @@ import { storeToRefs } from 'pinia'
 import dayjs from 'dayjs'
 import { useSprintsStore } from '../../../stores/sprints'
 import { useTasksStore } from '../../../stores/tasks'
+import { useTaskForm } from '../composables/useTaskForm'
 import * as CurrentSprint from './'
 
 const sprintsStore = useSprintsStore()
@@ -22,10 +23,7 @@ const duration = computed(() => {
 
 const tasksStore = useTasksStore()
 const { tasks } = storeToRefs(tasksStore)
-const hasOpenedTaskForm = ref(false)
-const toggleTaskForm = (isOpened: boolean) => {
-  hasOpenedTaskForm.value = isOpened
-}
+const { hasOpenedTaskForm, toggleTaskForm } = useTaskForm()
 </script>
 
 <template>
@@ -56,7 +54,7 @@ const toggleTaskForm = (isOpened: boolean) => {
         <CurrentSprint.TaskForm
           v-if="hasOpenedTaskForm"
           @cancel="toggleTaskForm(false)"
-          @created-task="toggleTaskForm(false)"
+          @saved="toggleTaskForm(false)"
         />
 
         <CurrentSprint.Task

@@ -6,10 +6,11 @@ import { useUserStore } from './user'
 import { useSprintsStore } from './sprints'
 
 export type TTask = Database['public']['Tables']['tasks']['Row']
-export type TNewTask = Database['public']['Tables']['tasks']['Insert']
-export type TTaskPayload = Pick<TNewTask, 'name' | 'description' | 'planned_at' | 'is_done' | 'sprint_id'>
+export type TCreatedTask = Pick<Database['public']['Tables']['tasks']['Insert'], 'name' | 'description' | 'planned_at' | 'is_done' | 'sprint_id'>
+export type TUpdatedTask = Database['public']['Tables']['tasks']['Update']
 export type TSprintId = Database['public']['Tables']['sprints']['Row']['id']
 
+// TODO: Добавить обработку ошибок
 export const useTasksStore = defineStore('tasks', () => {
   const tasks = ref<TTask[]>([])
 
@@ -29,7 +30,7 @@ export const useTasksStore = defineStore('tasks', () => {
 
   const userStore = useUserStore()
 
-  const createTask = async (task: TTaskPayload) => {
+  const createTask = async (task: TCreatedTask) => {
     if (userStore.user === null) {
       throw Error('User not found')
     }
@@ -54,7 +55,7 @@ export const useTasksStore = defineStore('tasks', () => {
 
   const sprintStore = useSprintsStore()
 
-  const createTaskByCurrentSprint = async (task: TTaskPayload) => {
+  const createTaskByCurrentSprint = async (task: TCreatedTask) => {
     if (sprintStore.currentSprint === null) {
       throw Error('Sprint not found')
     }
@@ -85,10 +86,28 @@ export const useTasksStore = defineStore('tasks', () => {
     }
   }
 
+  const updateTask = async (taskId: TUpdatedTask['id'], task: TUpdatedTask) => {
+    if (userStore.user === null) {
+      throw Error('User not found')
+    }
+
+    const updatedTaskIndex = tasks.value.findIndex(task => task.id === taskId)
+    tasks.value.splice(updatedTaskIndex, 1, { ...tasks.value[updatedTaskIndex], ...task })
+
+    const { error } = await supabase.from('tasks')
+      .update(task)
+      .eq('id', taskId)
+
+    if (error !== null) {
+      throw Error(error.message)
+    }
+  }
+
   return {
     tasks,
     fetchTasksBySprint,
     createTask,
-    createTaskByCurrentSprint
+    createTaskByCurrentSprint,
+    updateTask
   }
 })

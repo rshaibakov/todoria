@@ -2,27 +2,43 @@
 import { computed } from 'vue'
 import dayjs from 'dayjs'
 import { TTask } from '../../../stores/tasks'
+import { useTaskForm } from '../composables/useTaskForm'
+import * as CurrentSprint from '.'
 
 const props = defineProps<{ task: TTask }>()
+
+const { hasOpenedTaskForm, toggleTaskForm } = useTaskForm()
 
 const taskPlannedAt = computed(() => props.task.planned_at && dayjs(props.task.planned_at).format('ddd, D MMMM'))
 </script>
 
 <template>
-  <li class="task">
-    <div class="primary">
-      <span class="name">
-        {{ props.task.name }}
-      </span>
+  <li
+    class="task"
+    @click="toggleTaskForm(true)"
+  >
+    <CurrentSprint.TaskForm
+      v-if="hasOpenedTaskForm"
+      :task="task"
+      @cancel="toggleTaskForm(false)"
+      @saved="toggleTaskForm(false)"
+    />
 
-      <span class="planned-at">
-        {{ taskPlannedAt }}
-      </span>
-    </div>
+    <template v-else>
+      <div class="primary">
+        <span class="name">
+          {{ props.task.name }}
+        </span>
 
-    <div class="description">
-      {{ props.task.description }}
-    </div>
+        <span class="planned-at">
+          {{ taskPlannedAt }}
+        </span>
+      </div>
+
+      <div class="description">
+        {{ props.task.description }}
+      </div>
+    </template>
   </li>
 </template>
 
@@ -30,7 +46,8 @@ const taskPlannedAt = computed(() => props.task.planned_at && dayjs(props.task.p
 .task {
   @apply
     px-2
-    py-1;
+    py-1
+    cursor-pointer;
 }
 
 .task + .task {
