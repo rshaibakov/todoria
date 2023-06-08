@@ -34,6 +34,14 @@ export interface Database {
           start_at?: string | null
           user_id?: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "sprints_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       tasks: {
         Row: {
@@ -66,6 +74,20 @@ export interface Database {
           sprint_id?: string | null
           user_id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "tasks_sprint_id_fkey"
+            columns: ["sprint_id"]
+            referencedRelation: "sprints"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {
