@@ -24,7 +24,8 @@
     "src/**/*.vue"
   ],
   "exclude": [
-    "src/**/*.test.ts"
+    "src/**/*.test.ts",
+    "src/**/mocks.ts"
   ],
   "references": [
     {

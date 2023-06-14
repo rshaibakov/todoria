@@ -15,6 +15,7 @@
     "vitest.config.ts",
     "src/**/*.d.ts",
     "src/**/*.test.ts",
+    "src/**/mocks.ts",
     "test/**/*.ts"
   ]
 }
