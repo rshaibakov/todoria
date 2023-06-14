@@ -172,7 +172,7 @@ describe('CurrentSprint', () => {
 
     describe('when edit task', () => {
       test('task edited', async () => {
-        const { findByTestId, getByTestId, getByPlaceholderText, queryByTestId } = renderWithConfig(CurrentSprint)
+        const { findByTestId, getByTestId, getAllByTestId, getByPlaceholderText, queryByTestId } = renderWithConfig(CurrentSprint)
 
         await fireEvent.click(await findByTestId('current-sprint-task'))
         await fireEvent.update(getByPlaceholderText('Название'), mocks.newTask[0].name)
@@ -180,10 +180,10 @@ describe('CurrentSprint', () => {
         await fireEvent.submit(getByTestId('current-sprint-task-form'))
 
         await waitFor(() => {
-          const currentSprintTask = getByTestId('current-sprint-task')
+          const currentSprintTasks = getAllByTestId('current-sprint-task')
           expect(queryByTestId('current-sprint-task-form')).not.toBeInTheDocument()
-          expect(currentSprintTask).toContainHTML(mocks.newTask[0].name)
-          expect(currentSprintTask).toContainHTML(mocks.newTask[0].description)
+          expect(currentSprintTasks[0]).toContainHTML(mocks.newTask[0].name)
+          expect(currentSprintTasks[0]).toContainHTML(mocks.newTask[0].description)
         })
       })
     })
