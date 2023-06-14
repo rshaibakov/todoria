@@ -87,10 +87,6 @@ export const useTasksStore = defineStore('tasks', () => {
   }
 
   const updateTask = async (taskId: TUpdatedTask['id'], task: TUpdatedTask) => {
-    if (userStore.user === null) {
-      throw Error('User not found')
-    }
-
     const updatedTaskIndex = tasks.value.findIndex(task => task.id === taskId)
     tasks.value.splice(updatedTaskIndex, 1, { ...tasks.value[updatedTaskIndex], ...task })
 

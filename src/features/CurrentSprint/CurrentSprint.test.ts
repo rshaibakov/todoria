@@ -3,113 +3,36 @@ import { fireEvent, waitFor } from '@testing-library/vue'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 import dayjs from 'dayjs'
-import { customResponse, renderWithConfig } from '../../../test/setup'
+import * as mocks from './mocks'
+import { flushPromises, renderWithConfig } from '../../../test/setup'
 import CurrentSprint from './CurrentSprint.vue'
+import { useUserStore } from '../../stores/user'
 
 // @ts-expect-error import.meta не может быть валидно прочитана TS в среде NodeJS
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
 
-const startAt = dayjs()
-const finishAt = dayjs().add(13, 'day')
-
-const mockedSprints = [
-  {
-    id: 'c3fcd82c-4382-451b-85b6-68a3bb2f575f',
-    user_id: '27c41dc4-d70f-4efa-9ed0-ded37d5be096',
-    number: 1,
-    start_at: startAt.format('YYYY-MM-DD'),
-    finish_at: finishAt.format('YYYY-MM-DD'),
-    created_at: '2023-03-27T11:04:02.366662+00:00'
-  }
-]
-
-const mockedTasks = [
-  {
-    id: 'c3fcd82c-4382-451b-85b6-68a3bb2f575f',
-    user_id: '27c41dc4-d70f-4efa-9ed0-ded37d5be096',
-    sprint_id: 'c3fcd82c-4382-451b-85b6-68a3bb2f575f',
-    name: 'Сходить в магазин',
-    description: 'Купить продукты, бытовую химию и подарки',
-    is_done: false,
-    planned_at: '2023-03-28 12:30:32+00',
-    created_at: '2023-03-27T11:04:02.366662+00:00'
-  },
-  {
-    id: 'c3fcd82c-4382-451b-85b6-68a3bb2f5423',
-    user_id: '27c41dc4-d70f-4efa-9ed0-ded37d5be096',
-    sprint_id: 'c3fcd82c-4382-451b-85b6-68a3bb2f575f',
-    name: 'Починить кран в ванной',
-    description: '',
-    is_done: false,
-    planned_at: '2023-03-28 12:30:32+00',
-    created_at: '2023-03-27T11:04:02.366662+00:00'
-  },
-  {
-    id: 'c3fcd82c-4382-451b-85b6-68a3bb2f5741',
-    user_id: '27c41dc4-d70f-4efa-9ed0-ded37d5be096',
-    sprint_id: 'c3fcd82c-4382-451b-85b6-68a3bb2f575f',
-    name: 'Посетить выставку',
-    description: 'Заказать билеты через онлайн кассу',
-    is_done: false,
-    planned_at: '2023-03-28 12:30:32+00',
-    created_at: '2023-03-27T11:04:02.366662+00:00'
-  }
-]
-
-const mockedNewTask = [
-  {
-    id: 'c3fcd82c-4382-451b-85b6-68a3342df1',
-    user_id: '27c41dc4-d70f-4efa-9ed0-ded37d5be096',
-    sprint_id: 'c3fcd82c-4382-451b-85b6-68a3bb2f575f',
-    name: 'Сделать домашнее задание',
-    description: 'Выполнить упражнения с 5 по 7 в тренажере',
-    is_done: false,
-    planned_at: '2023-03-28 12:30:32+00',
-    created_at: '2023-03-27T11:04:02.366662+00:00'
-  }
-]
-
-const mockedNewTaskWithoutPlannedAt = [
-  {
-    ...mockedNewTask,
-    planned_at: null
-  }
-]
-
 const server = setupServer(
   rest.get(`${SUPABASE_URL}/rest/v1/sprints`, (req, res, ctx) => {
-    return res(ctx.delay(100), ctx.json(mockedSprints))
+    return res(ctx.json(mocks.sprints))
   }),
   rest.get(`${SUPABASE_URL}/rest/v1/tasks`, (req, res, ctx) => {
-    return res(ctx.delay(100), ctx.json(mockedTasks))
+    return res(ctx.json(mocks.tasks))
   }),
   rest.post(`${SUPABASE_URL}/rest/v1/tasks`, (req, res, ctx) => {
-    if (req.params.planned_at === null) {
-      return customResponse(
-        ctx.status(200),
-        ctx.json(mockedNewTaskWithoutPlannedAt)
-      )
-    }
-
-    return customResponse(
+    return res(
       ctx.status(200),
-      ctx.json(mockedNewTask)
+      ctx.json(mocks.newTask)
     )
   })
 )
 
 // TODO: Доработать тесты при создании задачи
-server.events.on('request:start', (req) => {
-  console.log(req.method, req.url.href)
-})
-
 describe('CurrentSprint', () => {
   beforeAll(() => {
     server.listen({ onUnhandledRequest: 'bypass' })
   })
 
   afterEach(() => {
-    // window.history.replaceState({}, '', '/')
     server.resetHandlers()
   })
 
@@ -121,7 +44,7 @@ describe('CurrentSprint', () => {
     const { getByTestId } = renderWithConfig(CurrentSprint)
 
     await waitFor(() => {
-      const expectedTitle = `Спринт #${mockedSprints[0].number} [${startAt.format('ddd, D MMMM')} - ${finishAt.format('ddd, D MMMM')}]`
+      const expectedTitle = `Спринт #${mocks.sprints[0].number} [${mocks.startAt.format('ddd, D MMMM')} - ${mocks.finishAt.format('ddd, D MMMM')}]`
 
       expect(getByTestId('current-sprint-title')).toHaveTextContent(expectedTitle)
     })
@@ -133,10 +56,10 @@ describe('CurrentSprint', () => {
     await waitFor(() => {
       const currentSprintTasks = getAllByTestId('current-sprint-task')
 
-      expect(currentSprintTasks).toHaveLength(mockedTasks.length)
-      expect(currentSprintTasks[0]).toContainHTML(mockedTasks[0].name)
-      expect(currentSprintTasks[0]).toContainHTML(mockedTasks[0].description)
-      expect(currentSprintTasks[0]).toContainHTML(dayjs(mockedTasks[0].planned_at).format('ddd, D MMMM'))
+      expect(currentSprintTasks).toHaveLength(mocks.tasks.length)
+      expect(currentSprintTasks[0]).toContainHTML(mocks.tasks[0].name)
+      expect(currentSprintTasks[0]).toContainHTML(mocks.tasks[0].description)
+      expect(currentSprintTasks[0]).toContainHTML(dayjs(mocks.tasks[0].planned_at).format('ddd, D MMMM'))
     })
   })
 
@@ -180,21 +103,35 @@ describe('CurrentSprint', () => {
 
   describe('when submit filled form', () => {
     describe('when form is successfully sent', () => {
-      test.todo('task created', async () => {
-        const { getAllByTestId, getByTestId, getByPlaceholderText, queryByTestId } = renderWithConfig(CurrentSprint)
+      test('task created', async () => {
+        server.use(rest.post(`${SUPABASE_URL}/rest/v1/tasks`, (req, res, ctx) => {
+          return res(
+            ctx.status(200),
+            ctx.json(mocks.newTaskWithoutPlannedAt)
+          )
+        }))
+
+        const { getAllByTestId, getByTestId, getByPlaceholderText, queryByTestId, debug } = renderWithConfig(CurrentSprint)
+
+        const userStore = useUserStore()
+        userStore.$patch({
+          user: {}
+        })
+
+        await flushPromises()
 
         await fireEvent.click(getByTestId('current-sprint-task-add-button'))
-        await fireEvent.update(getByPlaceholderText('Название'), mockedNewTask[0].name)
-        await fireEvent.update(getByPlaceholderText('Описание'), `${mockedNewTask[0].description}`)
+        await fireEvent.update(getByPlaceholderText('Название'), mocks.newTaskWithoutPlannedAt[0].name)
+        await fireEvent.update(getByPlaceholderText('Описание'), mocks.newTaskWithoutPlannedAt[0].description)
         await fireEvent.submit(getByTestId('current-sprint-task-form'))
 
         await waitFor(() => {
           const currentSprintTasks = getAllByTestId('current-sprint-task')
 
           expect(queryByTestId('current-sprint-task-form')).not.toBeInTheDocument()
-          expect(currentSprintTasks).toHaveLength(mockedTasks.length)
-          expect(currentSprintTasks[0]).toContainHTML(mockedNewTask[0].name)
-          expect(currentSprintTasks[0]).toContainHTML(mockedNewTask[0].description)
+          expect(currentSprintTasks).toHaveLength(mocks.tasks.length + 1)
+          expect(currentSprintTasks[0]).toContainHTML(mocks.newTaskWithoutPlannedAt[0].name)
+          expect(currentSprintTasks[0]).toContainHTML(mocks.newTaskWithoutPlannedAt[0].description)
         })
       })
 
@@ -204,6 +141,51 @@ describe('CurrentSprint', () => {
     describe('when form is failed sent', () => {
       test.todo('task not created')
       test.todo('error displayed')
+    })
+  })
+
+  describe('when click task', () => {
+    test('task form displayed', async () => {
+      const { findByTestId, getByTestId, getByPlaceholderText } = renderWithConfig(CurrentSprint)
+
+      await fireEvent.click(await findByTestId('current-sprint-task'))
+
+      await waitFor(() => {
+        expect(getByTestId('current-sprint-task-form')).toBeInTheDocument()
+
+        const nameField = getByPlaceholderText('Название')
+        expect(nameField).toBeInTheDocument()
+        expect(nameField).toBeRequired()
+        expect(nameField).toHaveValue(mocks.tasks[0].name)
+
+        const descriptionField = getByPlaceholderText('Описание')
+        expect(descriptionField).toBeInTheDocument()
+        expect(descriptionField).toHaveValue(mocks.tasks[0].description)
+        expect(descriptionField).toBeInTheDocument()
+        expect(descriptionField).toHaveValue(mocks.tasks[0].description)
+
+        expect(getByTestId('current-sprint-planned-at-field')).toBeInTheDocument()
+        expect(getByTestId('current-sprint-cancel-button')).toBeInTheDocument()
+        expect(getByTestId('current-sprint-submit-button')).toBeInTheDocument()
+      })
+    })
+
+    describe('when edit task', () => {
+      test('task edited', async () => {
+        const { findByTestId, getByTestId, getByPlaceholderText, queryByTestId } = renderWithConfig(CurrentSprint)
+
+        await fireEvent.click(await findByTestId('current-sprint-task'))
+        await fireEvent.update(getByPlaceholderText('Название'), mocks.newTask[0].name)
+        await fireEvent.update(getByPlaceholderText('Описание'), mocks.newTask[0].description)
+        await fireEvent.submit(getByTestId('current-sprint-task-form'))
+
+        await waitFor(() => {
+          const currentSprintTask = getByTestId('current-sprint-task')
+          expect(queryByTestId('current-sprint-task-form')).not.toBeInTheDocument()
+          expect(currentSprintTask).toContainHTML(mocks.newTask[0].name)
+          expect(currentSprintTask).toContainHTML(mocks.newTask[0].description)
+        })
+      })
     })
   })
 })
