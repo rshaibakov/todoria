@@ -20,7 +20,7 @@ beforeEach(async () => {
   await router.isReady()
 })
 
-export const renderWithConfig = (TestComponent) => {
+export const renderWithSetup = (TestComponent) => {
   return {
     ...render(TestComponent, {
       global: {

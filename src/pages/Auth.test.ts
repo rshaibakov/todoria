@@ -1,7 +1,7 @@
 import { AuthError } from '@supabase/supabase-js'
 import { fireEvent, waitFor } from '@testing-library/vue'
 import { describe, test, vi } from 'vitest'
-import { renderWithConfig } from '../../test/setup'
+import { renderWithSetup } from '../../test/setup'
 import { supabase } from '../db'
 import Auth from './Auth.vue'
 
@@ -12,19 +12,19 @@ describe('Auth', () => {
   })
 
   test('text field is empty', async () => {
-    const { getByTestId } = renderWithConfig(Auth)
+    const { getByTestId } = renderWithSetup(Auth)
 
     expect(getByTestId('auth-email-text-field')).toHaveValue('')
   })
 
   test('submit button displayed', async () => {
-    const { getByTestId } = renderWithConfig(Auth)
+    const { getByTestId } = renderWithSetup(Auth)
 
     expect(getByTestId('auth-submit')).toHaveTextContent('Получить ссылку')
   })
 
   test('message hidden', async () => {
-    const { queryByTestId } = renderWithConfig(Auth)
+    const { queryByTestId } = renderWithSetup(Auth)
 
     expect(queryByTestId('auth-message')).not.toBeInTheDocument()
   })
@@ -42,13 +42,13 @@ describe('Auth', () => {
       })
 
       test('submit button displayed', async () => {
-        const { getByTestId } = renderWithConfig(Auth)
+        const { getByTestId } = renderWithSetup(Auth)
 
         expect(getByTestId('auth-submit')).toHaveTextContent('Получить ссылку')
       })
 
       test('message displayed', async () => {
-        const { getByTestId } = renderWithConfig(Auth)
+        const { getByTestId } = renderWithSetup(Auth)
 
         await fireEvent.update(getByTestId('auth-email-text-field'), 'rshaibakov@gmail.com')
         await fireEvent.submit(getByTestId('auth-form'))
@@ -73,7 +73,7 @@ describe('Auth', () => {
       })
 
       test('submit button displayed', async () => {
-        const { getByTestId } = renderWithConfig(Auth)
+        const { getByTestId } = renderWithSetup(Auth)
 
         expect(getByTestId('auth-submit')).toHaveTextContent('Получить ссылку')
       })
@@ -95,7 +95,7 @@ describe('Auth', () => {
       })
 
       test('error displayed', async () => {
-        const { getByTestId } = renderWithConfig(Auth)
+        const { getByTestId } = renderWithSetup(Auth)
 
         await fireEvent.update(getByTestId('auth-email-text-field'), 'rshaibakov@gmail.com')
         await fireEvent.submit(getByTestId('auth-form'))

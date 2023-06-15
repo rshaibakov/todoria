@@ -25,7 +25,8 @@
   ],
   "exclude": [
     "src/**/*.test.ts",
-    "src/**/mocks.ts"
+    "src/**/mocks.ts",
+    "src/**/tests/*.ts"
   ],
   "references": [
     {
