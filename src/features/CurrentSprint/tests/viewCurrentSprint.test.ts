@@ -1,5 +1,5 @@
 import { test } from 'vitest'
-import { screen, waitFor } from '@testing-library/vue'
+import { screen, waitFor, within } from '@testing-library/vue'
 import dayjs from 'dayjs'
 import { rest } from 'msw'
 import { renderWithSetup } from '../../../../test/setup'
@@ -24,15 +24,34 @@ test('task form not displayed', async () => {
   })
 })
 
-test('tasks displayed', async () => {
+test('tasks count corrected', async () => {
   renderWithSetup(CurrentSprint)
 
   await waitFor(() => {
     const currentSprintTasks = screen.getAllByTestId('current-sprint-task')
     expect(currentSprintTasks).toHaveLength(mocks.tasks.length)
-    expect(currentSprintTasks[0]).toContainHTML(mocks.tasks[0].name)
-    expect(currentSprintTasks[0]).toContainHTML(mocks.tasks[0].description)
-    expect(currentSprintTasks[0]).toContainHTML(dayjs(mocks.tasks[0].planned_at).format('ddd, D MMMM'))
+  })
+})
+
+test.concurrent.each(mocks.tasks.map((task, index) => [index, task]))('task %# displayed', async (index, expectedTask) => {
+  renderWithSetup(CurrentSprint)
+
+  await waitFor(() => {
+    const currentSprintTasks = screen.getAllByTestId('current-sprint-task')
+    const receivedTask = within(currentSprintTasks[index])
+    expect(receivedTask.getByTestId('task-name')).toHaveTextContent(expectedTask.name)
+
+    if (expectedTask.description === '' || expectedTask.description === null) {
+      expect(receivedTask.queryByTestId('task-description')).not.toBeInTheDocument()
+    } else {
+      expect(receivedTask.getByTestId('task-description')).toHaveTextContent(expectedTask.description)
+    }
+
+    if (expectedTask.planned_at === null) {
+      expect(receivedTask.queryByTestId('task-planned-at')).not.toBeInTheDocument()
+    } else {
+      expect(receivedTask.getByTestId('task-planned-at')).toHaveTextContent(dayjs(expectedTask.planned_at).format('ddd, D MMMM'))
+    }
   })
 })
 

@@ -26,16 +26,27 @@ const taskPlannedAt = computed(() => props.task.planned_at && dayjs(props.task.p
 
     <template v-else>
       <div class="primary">
-        <span class="name">
+        <span
+          class="name"
+          data-test-id="task-name"
+        >
           {{ props.task.name }}
         </span>
 
-        <span class="planned-at">
+        <span
+          v-if="taskPlannedAt"
+          class="planned-at"
+          data-test-id="task-planned-at"
+        >
           {{ taskPlannedAt }}
         </span>
       </div>
 
-      <div class="description">
+      <div
+        v-if="props.task.description"
+        class="description"
+        data-test-id="task-description"
+      >
         {{ props.task.description }}
       </div>
     </template>
