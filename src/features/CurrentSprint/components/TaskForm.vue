@@ -41,7 +41,7 @@ const onSubmit = () => {
 <template>
   <form
     class="form"
-    data-test-id="current-sprint-task-form"
+    data-test-id="task-form"
     @submit.prevent="onSubmit"
   >
     <input
@@ -63,7 +63,7 @@ const onSubmit = () => {
     <input
       ref="dateField"
       class="text-field"
-      data-test-id="current-sprint-planned-at-field"
+      data-test-id="task-form-planned-at-field"
       :value="taskPlannedAt || ''"
       type="date"
     >
@@ -71,7 +71,7 @@ const onSubmit = () => {
     <footer class="actions">
       <button
         class="button button-sm"
-        data-test-id="current-sprint-cancel-button"
+        data-test-id="task-form-cancel-button"
         type="button"
         @click.stop="emit('cancel')"
       >
@@ -80,7 +80,7 @@ const onSubmit = () => {
 
       <button
         class="button button-sm button-primary"
-        data-test-id="current-sprint-submit-button"
+        data-test-id="task-form-submit-button"
         type="submit"
       >
         Добавить
