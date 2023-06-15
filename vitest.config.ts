@@ -8,6 +8,7 @@ export default mergeConfig(viteConfig, defineConfig({
     environment: 'happy-dom',
     includeSource: ['src/**/*.{ts,tsx,vue}'],
     globals: true,
+    reporters: ['dot', 'verbose'],
     coverage: {
       provider: 'istanbul',
       reporter: ['text', 'json', 'html'],
