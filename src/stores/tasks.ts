@@ -55,6 +55,22 @@ export const useTasksStore = defineStore('tasks', () => {
 
   const sprintStore = useSprintsStore()
 
+  const sortTasks = (a: TTask, b: TTask) => {
+    if (a.planned_at !== null && b.planned_at !== null) {
+      return a.planned_at > b.planned_at ? 1 : -1
+    }
+
+    if (a.planned_at === null && b.planned_at !== null) {
+      return -1
+    }
+
+    if (a.planned_at !== null && b.planned_at === null) {
+      return 1
+    }
+
+    return 0
+  }
+
   const createTaskByCurrentSprint = async (task: TCreatedTask) => {
     if (sprintStore.currentSprint === null) {
       throw Error('Sprint not found')
@@ -66,21 +82,7 @@ export const useTasksStore = defineStore('tasks', () => {
     })
 
     if (newTask.planned_at !== null) {
-      tasks.value = [newTask, ...tasks.value].sort((a, b) => {
-        if (a.planned_at !== null && b.planned_at !== null) {
-          return a.planned_at > b.planned_at ? 1 : -1
-        }
-
-        if (a.planned_at === null && b.planned_at !== null) {
-          return -1
-        }
-
-        if (a.planned_at !== null && b.planned_at === null) {
-          return 1
-        }
-
-        return 0
-      })
+      tasks.value = [newTask, ...tasks.value].sort(sortTasks)
     } else {
       tasks.value = [newTask, ...tasks.value]
     }
