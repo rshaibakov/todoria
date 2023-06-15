@@ -12,7 +12,7 @@ describe('when click task', () => {
     await fireEvent.click(await screen.findByTestId('current-sprint-task'))
 
     await waitFor(() => {
-      expect(screen.getByTestId('current-sprint-task-form')).toBeInTheDocument()
+      expect(screen.getByTestId('task-form')).toBeInTheDocument()
 
       const nameField = screen.getByPlaceholderText('Название')
       expect(nameField).toBeInTheDocument()
@@ -25,9 +25,9 @@ describe('when click task', () => {
       expect(descriptionField).toBeInTheDocument()
       expect(descriptionField).toHaveValue(mocks.tasks[0].description)
 
-      expect(screen.getByTestId('current-sprint-planned-at-field')).toBeInTheDocument()
-      expect(screen.getByTestId('current-sprint-cancel-button')).toBeInTheDocument()
-      expect(screen.getByTestId('current-sprint-submit-button')).toBeInTheDocument()
+      expect(screen.getByTestId('task-form-planned-at-field')).toBeInTheDocument()
+      expect(screen.getByTestId('task-form-cancel-button')).toBeInTheDocument()
+      expect(screen.getByTestId('task-form-submit-button')).toBeInTheDocument()
     })
   })
 
@@ -39,11 +39,11 @@ describe('when click task', () => {
         await fireEvent.click(await screen.findByTestId('current-sprint-task'))
         await fireEvent.update(screen.getByPlaceholderText('Название'), mocks.newTask.name)
         await fireEvent.update(screen.getByPlaceholderText('Описание'), mocks.newTask.description)
-        await fireEvent.submit(screen.getByTestId('current-sprint-task-form'))
+        await fireEvent.submit(screen.getByTestId('task-form'))
 
         await waitFor(() => {
           const currentSprintTasks = screen.getAllByTestId('current-sprint-task')
-          expect(screen.queryByTestId('current-sprint-task-form')).not.toBeInTheDocument()
+          expect(screen.queryByTestId('task-form')).not.toBeInTheDocument()
           expect(currentSprintTasks[0]).toContainHTML(mocks.newTask.name)
           expect(currentSprintTasks[0]).toContainHTML(mocks.newTask.description)
         })

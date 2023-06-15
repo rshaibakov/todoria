@@ -12,7 +12,7 @@ test('title displayed', async () => {
 
   await waitFor(() => {
     expect(screen.getByTestId('current-sprint-title'))
-      .toHaveTextContent(`Спринт #${mocks.sprints[0].number} [${mocks.startAt.format('ddd, D MMMM')} - ${mocks.finishAt.format('ddd, D MMMM')}]`)
+      .toHaveTextContent(`Спринт #${mocks.sprints[0].number} [${mocks.sprintStartAt.format('ddd, D MMMM')} - ${mocks.sprintFinishAt.format('ddd, D MMMM')}]`)
   })
 })
 
