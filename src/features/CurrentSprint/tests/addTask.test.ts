@@ -1,5 +1,5 @@
 import { describe, test } from 'vitest'
-import { fireEvent, waitFor } from '@testing-library/vue'
+import { screen, fireEvent, waitFor } from '@testing-library/vue'
 import { rest } from 'msw'
 import { flushPromises, renderWithSetup } from '../../../../test/setup'
 import { useUserStore } from '../../../stores/user'
@@ -9,33 +9,33 @@ import { server, SUPABASE_URL } from './__setup__'
 
 describe('when click task add button', () => {
   test('task form displayed', async () => {
-    const { getByTestId, getByPlaceholderText } = renderWithSetup(CurrentSprint)
+    renderWithSetup(CurrentSprint)
 
-    await fireEvent.click(getByTestId('current-sprint-task-add-button'))
+    await fireEvent.click(screen.getByTestId('current-sprint-task-add-button'))
 
     await waitFor(() => {
-      expect(getByTestId('current-sprint-task-form')).toBeInTheDocument()
-      expect(getByPlaceholderText('Название')).toBeInTheDocument()
-      expect(getByPlaceholderText('Название')).toBeRequired()
-      expect(getByPlaceholderText('Описание')).toBeInTheDocument()
-      expect(getByTestId('current-sprint-planned-at-field')).toBeInTheDocument()
-      expect(getByTestId('current-sprint-cancel-button')).toBeInTheDocument()
-      expect(getByTestId('current-sprint-submit-button')).toBeInTheDocument()
+      expect(screen.getByTestId('current-sprint-task-form')).toBeInTheDocument()
+      expect(screen.getByPlaceholderText('Название')).toBeInTheDocument()
+      expect(screen.getByPlaceholderText('Название')).toBeRequired()
+      expect(screen.getByPlaceholderText('Описание')).toBeInTheDocument()
+      expect(screen.getByTestId('current-sprint-planned-at-field')).toBeInTheDocument()
+      expect(screen.getByTestId('current-sprint-cancel-button')).toBeInTheDocument()
+      expect(screen.getByTestId('current-sprint-submit-button')).toBeInTheDocument()
     })
   })
 })
 
 describe('when submit blank form', () => {
   test('task form not sent', async () => {
-    const { getByTestId, getByPlaceholderText } = renderWithSetup(CurrentSprint)
+    renderWithSetup(CurrentSprint)
 
-    await fireEvent.click(getByTestId('current-sprint-task-add-button'))
-    await fireEvent.click(getByTestId('current-sprint-submit-button'))
+    await fireEvent.click(screen.getByTestId('current-sprint-task-add-button'))
+    await fireEvent.click(screen.getByTestId('current-sprint-submit-button'))
 
-    expect(getByTestId('current-sprint-task-form')).toBeInTheDocument()
-    expect(getByPlaceholderText('Название')).toBeRequired()
-    expect(getByPlaceholderText('Описание')).not.toBeRequired()
-    expect(getByTestId('current-sprint-planned-at-field')).not.toBeRequired()
+    expect(screen.getByTestId('current-sprint-task-form')).toBeInTheDocument()
+    expect(screen.getByPlaceholderText('Название')).toBeRequired()
+    expect(screen.getByPlaceholderText('Описание')).not.toBeRequired()
+    expect(screen.getByTestId('current-sprint-planned-at-field')).not.toBeRequired()
   })
 })
 
@@ -52,22 +52,22 @@ describe('when submit filled form', () => {
         )
       }))
 
-      const { getAllByTestId, getByTestId, getByPlaceholderText, queryByTestId } = renderWithSetup(CurrentSprint)
+      renderWithSetup(CurrentSprint)
 
       const userStore = useUserStore()
       userStore.$patch({ user: { id: '123' } })
 
       await flushPromises()
 
-      await fireEvent.click(getByTestId('current-sprint-task-add-button'))
-      await fireEvent.update(getByPlaceholderText('Название'), mocks.newTask.name)
-      await fireEvent.update(getByPlaceholderText('Описание'), mocks.newTask.description)
-      await fireEvent.submit(getByTestId('current-sprint-task-form'))
+      await fireEvent.click(screen.getByTestId('current-sprint-task-add-button'))
+      await fireEvent.update(screen.getByPlaceholderText('Название'), mocks.newTask.name)
+      await fireEvent.update(screen.getByPlaceholderText('Описание'), mocks.newTask.description)
+      await fireEvent.submit(screen.getByTestId('current-sprint-task-form'))
 
       await waitFor(() => {
-        const currentSprintTasks = getAllByTestId('current-sprint-task')
+        const currentSprintTasks = screen.getAllByTestId('current-sprint-task')
 
-        expect(queryByTestId('current-sprint-task-form')).not.toBeInTheDocument()
+        expect(screen.queryByTestId('current-sprint-task-form')).not.toBeInTheDocument()
         expect(currentSprintTasks).toHaveLength(mocks.tasks.length + 1)
         expect(currentSprintTasks[0]).toContainHTML(mocks.newTask.name)
         expect(currentSprintTasks[0]).toContainHTML(mocks.newTask.description)
