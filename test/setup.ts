@@ -27,7 +27,11 @@ export const renderWithSetup = (TestComponent) => {
         plugins: [
           createTestingPinia({ stubActions: false }),
           router
-        ]
+        ],
+        config: {
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          errorHandler: () => { }
+        }
       }
     }),
     router

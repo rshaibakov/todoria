@@ -21,7 +21,7 @@ const taskPlannedAt = computed(() => props.task.planned_at && dayjs(props.task.p
       v-if="hasOpenedTaskForm"
       :task="task"
       @cancel="toggleTaskForm(false)"
-      @saved="toggleTaskForm(false)"
+      @submit="toggleTaskForm(false)"
     />
 
     <template v-else>

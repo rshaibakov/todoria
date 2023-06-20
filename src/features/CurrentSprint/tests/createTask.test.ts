@@ -114,7 +114,41 @@ describe('when submit filled form', () => {
   })
 
   describe('when form is failed sent', () => {
-    test.todo('task not created')
+    test('task not created', async () => {
+      const expectedNewTask = mocks.newTask
+
+      server.use(rest.post(`${SUPABASE_URL}/rest/v1/tasks`, (req, res, ctx) => {
+        return res(
+          ctx.status(500),
+          ctx.json({
+            error: { message: 'Server error' }
+          })
+        )
+      }))
+
+      renderWithSetup(CurrentSprint)
+
+      const userStore = useUserStore()
+      userStore.$patch({ user: { id: '123' } })
+
+      await flushPromises()
+
+      await fireEvent.click(screen.getByTestId('current-sprint-task-add-button'))
+      await fireEvent.update(screen.getByPlaceholderText('Название'), expectedNewTask.name)
+      await fireEvent.update(screen.getByPlaceholderText('Описание'), expectedNewTask.description)
+      await fireEvent.submit(screen.getByTestId('task-form'))
+
+      await waitFor(() => {
+        const currentSprintTasks = screen.getAllByTestId('current-sprint-task')
+
+        expect(screen.queryByTestId('task-form')).not.toBeInTheDocument()
+        expect(currentSprintTasks).toHaveLength(mocks.tasks.length)
+
+        const receivedNewTask = currentSprintTasks.find((task) => task.textContent?.includes(expectedNewTask.name))
+        expect(receivedNewTask).toBeUndefined()
+      })
+    })
+
     test.todo('error displayed')
   })
 })

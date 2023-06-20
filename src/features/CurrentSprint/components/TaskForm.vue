@@ -5,7 +5,7 @@ import { TTask, useTasksStore } from '../../../stores/tasks'
 
 const props = defineProps<{ task?: TTask }>()
 
-const emit = defineEmits(['cancel', 'saved'])
+const emit = defineEmits(['cancel', 'submit'])
 
 const { createTaskByCurrentSprint, updateTask } = useTasksStore()
 
@@ -15,26 +15,26 @@ const dateField = ref<HTMLInputElement | null>(null)
 
 const taskPlannedAt = computed(() => props.task?.planned_at && dayjs(props.task?.planned_at).format('YYYY-MM-DD'))
 
-const onSubmit = () => {
+const onSubmit = async () => {
   if (!nameField.value) {
     return
   }
 
+  emit('submit')
+
   if (props.task !== undefined) {
-    updateTask(props.task.id, {
+    await updateTask(props.task.id, {
       name: nameField.value.value,
       description: descriptionField.value?.value,
       planned_at: dateField.value?.value || null
     })
   } else {
-    createTaskByCurrentSprint({
+    await createTaskByCurrentSprint({
       name: nameField.value.value,
       description: descriptionField.value?.value,
       planned_at: dateField.value?.value || null
     })
   }
-
-  emit('saved')
 }
 </script>
 

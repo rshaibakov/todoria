@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import dayjs from 'dayjs'
 import { useSprintsStore } from '../../../stores/sprints'
@@ -54,7 +54,7 @@ const { hasOpenedTaskForm, toggleTaskForm } = useTaskForm()
         <CurrentSprint.TaskForm
           v-if="hasOpenedTaskForm"
           @cancel="toggleTaskForm(false)"
-          @saved="toggleTaskForm(false)"
+          @submit="toggleTaskForm(false)"
         />
 
         <CurrentSprint.Task
