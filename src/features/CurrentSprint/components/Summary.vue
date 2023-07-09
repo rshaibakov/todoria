@@ -50,25 +50,34 @@ const { hasOpenedTaskForm, toggleTaskForm } = useTaskForm()
         </button>
       </div>
 
-      <ul class="items">
-        <CurrentSprint.TaskForm
-          v-if="hasOpenedTaskForm"
-          @cancel="toggleTaskForm(false)"
-          @submit="toggleTaskForm(false)"
-        />
+      <CurrentSprint.TaskForm
+        v-if="hasOpenedTaskForm"
+        class="task-form"
+        @cancel="toggleTaskForm(false)"
+        @submit="toggleTaskForm(false)"
+      />
 
+      <TransitionGroup
+        class="items"
+        name="flip-list"
+        tag="ul"
+      >
         <CurrentSprint.Task
           v-for="task in tasks"
           :key="task.id"
           data-test-id="current-sprint-task"
           :task="task"
         />
-      </ul>
+      </TransitionGroup>
     </div>
   </section>
 </template>
 
 <style scoped>
+.flip-list-move {
+  transition: transform 0.2s;
+}
+
 .summary {
   @apply
     px-5
@@ -92,6 +101,7 @@ const { hasOpenedTaskForm, toggleTaskForm } = useTaskForm()
   grid-template: 1fr auto / 1fr;
   grid-template-areas:
     "caption actions"
+    "task-form task-form"
     "items items";
 }
 
@@ -105,6 +115,10 @@ const { hasOpenedTaskForm, toggleTaskForm } = useTaskForm()
 
 .actions {
   grid-area: actions;
+}
+
+.task-form {
+  grid-area: task-form;
 }
 
 .items {
