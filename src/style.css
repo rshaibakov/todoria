@@ -36,6 +36,17 @@
       rounded;
   }
 
+  .button-danger {
+    @apply
+      block
+      bg-red-500
+      hover:bg-red-700
+      text-white
+      font-bold
+      whitespace-nowrap
+      rounded;
+  }
+
   .button-sm {
     @apply
       px-4 py-1
