@@ -1,9 +1,10 @@
 import { describe, test } from 'vitest'
 import { screen, fireEvent, waitFor } from '@testing-library/vue'
+import { rest } from 'msw'
 import { renderWithSetup } from '../../../../test/setup'
 import CurrentSprint from '../CurrentSprint.vue'
 import * as mocks from './__mocks__'
-import './__setup__'
+import { SUPABASE_URL, server } from './__setup__'
 
 describe('when click task', () => {
   test('task form displayed', async () => {
@@ -33,19 +34,28 @@ describe('when click task', () => {
 
   describe('when edit task', () => {
     describe('when form is successfully sent', () => {
-      test('task edited', async () => {
+      test('task saved', async () => {
+        const expectedNewTask = mocks.newTask
+
+        server.use(rest.patch(`${SUPABASE_URL}/rest/v1/tasks`, (req, res, ctx) => {
+          return res(
+            ctx.status(200),
+            ctx.json([expectedNewTask])
+          )
+        }))
+
         renderWithSetup(CurrentSprint)
 
         await fireEvent.click(await screen.findByTestId('current-sprint-task'))
-        await fireEvent.update(screen.getByPlaceholderText('Название'), mocks.newTask.name)
-        await fireEvent.update(screen.getByPlaceholderText('Описание'), mocks.newTask.description)
+        await fireEvent.update(screen.getByPlaceholderText('Название'), expectedNewTask.name)
+        await fireEvent.update(screen.getByPlaceholderText('Описание'), expectedNewTask.description)
         await fireEvent.submit(screen.getByTestId('task-form'))
 
         await waitFor(() => {
           const currentSprintTasks = screen.getAllByTestId('current-sprint-task')
           expect(screen.queryByTestId('task-form')).not.toBeInTheDocument()
-          expect(currentSprintTasks[0]).toContainHTML(mocks.newTask.name)
-          expect(currentSprintTasks[0]).toContainHTML(mocks.newTask.description)
+          expect(currentSprintTasks[0]).toContainHTML(expectedNewTask.name)
+          expect(currentSprintTasks[0]).toContainHTML(expectedNewTask.description)
         })
       })
 
@@ -53,7 +63,37 @@ describe('when click task', () => {
     })
 
     describe('when form is failed sent', () => {
-      test.todo('task not edited')
+      test('task not saved', async () => {
+        const expectedNewTask = mocks.newTask
+        console.error = vi.fn()
+
+        server.use(rest.patch(`${SUPABASE_URL}/rest/v1/tasks`, (req, res, ctx) => {
+          return res(
+            ctx.status(500),
+            ctx.json({
+              message: 'Server error'
+            })
+          )
+        }))
+
+        renderWithSetup(CurrentSprint)
+
+        await fireEvent.click(await screen.findByTestId('current-sprint-task'))
+        await fireEvent.update(screen.getByPlaceholderText('Название'), expectedNewTask.name)
+        await fireEvent.update(screen.getByPlaceholderText('Описание'), expectedNewTask.description)
+        await fireEvent.submit(screen.getByTestId('task-form'))
+
+        await waitFor(() => {
+          const currentSprintTasks = screen.getAllByTestId('current-sprint-task')
+          expect(screen.queryByTestId('task-form')).not.toBeInTheDocument()
+          expect(currentSprintTasks[0]).not.toContainHTML(expectedNewTask.name)
+          expect(currentSprintTasks[0]).not.toContainHTML(expectedNewTask.description)
+
+          expect(console.error).toHaveBeenCalledTimes(1)
+          expect(console.error).toHaveBeenCalledWith('Server error')
+        })
+      })
+
       test.todo('error displayed')
     })
   })

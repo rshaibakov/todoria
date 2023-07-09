@@ -32,4 +32,5 @@ afterEach(() => {
 
 afterAll(() => {
   server.close()
+  vi.restoreAllMocks()
 })

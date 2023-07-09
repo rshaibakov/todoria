@@ -29,8 +29,9 @@ export const renderWithSetup = (TestComponent) => {
           router
         ],
         config: {
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          errorHandler: () => { }
+          errorHandler: (error: Error) => {
+            console.error(error.message)
+          }
         }
       }
     }),
