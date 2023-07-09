@@ -56,7 +56,6 @@ const taskPlannedAt = computed(() => props.task.planned_at && dayjs(props.task.p
 <style scoped>
 .task {
   @apply
-    px-2
     py-1
     cursor-pointer;
 }
@@ -69,6 +68,7 @@ const taskPlannedAt = computed(() => props.task.planned_at && dayjs(props.task.p
 
 .primary {
   @apply
+    px-2
     w-full
     flex
     flex-nowrap
@@ -88,6 +88,7 @@ const taskPlannedAt = computed(() => props.task.planned_at && dayjs(props.task.p
 
 .description {
   @apply
+    px-2
     text-sm;
 }
 </style>
