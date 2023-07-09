@@ -1,3 +1,12 @@
+# [1.3.0](https://github.com/rshaibakov/todoria/compare/v1.2.0...v1.3.0) (2023-07-09)
+
+
+### Features
+
+* **currentSprint:** add animate tasks ([8bf7389](https://github.com/rshaibakov/todoria/commit/8bf73892da63ee6b88b8c920af151e635cd94f58))
+* **task:** add updated task revert ([348031b](https://github.com/rshaibakov/todoria/commit/348031b3f329974a616ece1fb568d721d1d22717))
+* **task:** add updating tasks ([eae6200](https://github.com/rshaibakov/todoria/commit/eae6200779033816d75acb6eaa1cdbfd8536f87f))
+
 # [1.2.0](https://github.com/rshaibakov/todoria/compare/v1.1.0...v1.2.0) (2023-06-05)
 
 
