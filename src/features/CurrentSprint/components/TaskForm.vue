@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import { TTask, useTasksStore } from '../../../stores/tasks'
 
 const props = defineProps<{ task?: TTask }>()
-const emit = defineEmits(['cancel', 'remove', 'submit'])
+const emit = defineEmits(['cancel', 'delete', 'submit'])
 
 const { createTaskByCurrentSprint, updateTask } = useTasksStore()
 
@@ -73,10 +73,10 @@ const onSubmit = async () => {
     <footer class="actions">
       <button
         v-if="isForUpdate"
-        class="button button-sm button-danger remove-button"
-        data-test-id="task-form-remove-button"
+        class="button button-sm button-danger delete-button"
+        data-test-id="task-form-delete-button"
         type="button"
-        @click.stop="emit('remove')"
+        @click.stop="emit('delete')"
       >
         Удалить
       </button>
@@ -119,7 +119,7 @@ const onSubmit = async () => {
   grid-template-columns: [one] 1fr [two] 1fr [three] 1fr [four] 1fr [five];
 }
 
-.remove-button {
+.delete-button {
   grid-column: one / span two;
 }
 
