@@ -1,7 +1,7 @@
 import { describe, test, vi } from 'vitest'
 import { fireEvent, waitFor } from '@testing-library/vue'
 import { supabase } from '../db'
-import { renderWithConfig } from '../../test/setup'
+import { renderWithSetup } from '../../test/setup'
 import Home from './Home.vue'
 import { AuthError } from '@supabase/supabase-js'
 
@@ -12,13 +12,13 @@ describe('Home', () => {
   })
 
   test('sign out button displayed', () => {
-    const { getByTestId } = renderWithConfig(Home)
+    const { getByTestId } = renderWithSetup(Home)
 
     expect(getByTestId('sign-out-button')).toHaveTextContent('Выйти')
   })
 
   test('error message hidden', () => {
-    const { queryByTestId } = renderWithConfig(Home)
+    const { queryByTestId } = renderWithSetup(Home)
 
     expect(queryByTestId('sign-out-message')).not.toBeInTheDocument()
   })
@@ -30,7 +30,7 @@ describe('Home', () => {
       })
 
       test('sign out button with loading displayed', async () => {
-        const { getByTestId } = renderWithConfig(Home)
+        const { getByTestId } = renderWithSetup(Home)
 
         await fireEvent.click(getByTestId('sign-out-button'))
 
@@ -42,7 +42,7 @@ describe('Home', () => {
       })
 
       test('error message hidden', async () => {
-        const { getByTestId, queryByTestId } = renderWithConfig(Home)
+        const { getByTestId, queryByTestId } = renderWithSetup(Home)
 
         await fireEvent.click(getByTestId('sign-out-button'))
 
@@ -50,7 +50,7 @@ describe('Home', () => {
       })
 
       test('redirected to auth page', async () => {
-        const { getByTestId, router } = renderWithConfig(Home)
+        const { getByTestId, router } = renderWithSetup(Home)
         const push = vi.spyOn(router, 'push')
 
         await fireEvent.click(getByTestId('sign-out-button'))
@@ -68,7 +68,7 @@ describe('Home', () => {
       })
 
       test('sign out button displayed', async () => {
-        const { getByTestId } = renderWithConfig(Home)
+        const { getByTestId } = renderWithSetup(Home)
 
         await fireEvent.click(getByTestId('sign-out-button'))
 
@@ -80,7 +80,7 @@ describe('Home', () => {
       })
 
       test('error message displayed', async () => {
-        const { getByTestId } = renderWithConfig(Home)
+        const { getByTestId } = renderWithSetup(Home)
 
         await fireEvent.click(getByTestId('sign-out-button'))
 
@@ -90,7 +90,7 @@ describe('Home', () => {
       })
 
       test('redirect to auth page did not occur', async () => {
-        const { getByTestId, router } = renderWithConfig(Home)
+        const { getByTestId, router } = renderWithSetup(Home)
         const push = vi.spyOn(router, 'push')
 
         await fireEvent.click(getByTestId('sign-out-button'))

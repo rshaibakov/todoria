@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import dayjs from 'dayjs'
 import { useSprintsStore } from '../../../stores/sprints'
 import { useTasksStore } from '../../../stores/tasks'
+import { useTaskForm } from '../composables/useTaskForm'
 import * as CurrentSprint from './'
 
 const sprintsStore = useSprintsStore()
@@ -22,10 +23,7 @@ const duration = computed(() => {
 
 const tasksStore = useTasksStore()
 const { tasks } = storeToRefs(tasksStore)
-const hasOpenedTaskForm = ref(false)
-const toggleTaskForm = (isOpened: boolean) => {
-  hasOpenedTaskForm.value = isOpened
-}
+const { hasOpenedTaskForm, toggleTaskForm } = useTaskForm()
 </script>
 
 <template>
@@ -52,25 +50,34 @@ const toggleTaskForm = (isOpened: boolean) => {
         </button>
       </div>
 
-      <ul class="items">
-        <CurrentSprint.TaskForm
-          v-if="hasOpenedTaskForm"
-          @cancel="toggleTaskForm(false)"
-          @created-task="toggleTaskForm(false)"
-        />
+      <CurrentSprint.TaskForm
+        v-if="hasOpenedTaskForm"
+        class="task-form"
+        @cancel="toggleTaskForm(false)"
+        @submit="toggleTaskForm(false)"
+      />
 
+      <TransitionGroup
+        class="items"
+        name="flip-list"
+        tag="ul"
+      >
         <CurrentSprint.Task
           v-for="task in tasks"
           :key="task.id"
           data-test-id="current-sprint-task"
           :task="task"
         />
-      </ul>
+      </TransitionGroup>
     </div>
   </section>
 </template>
 
 <style scoped>
+.flip-list-move {
+  transition: transform 0.2s;
+}
+
 .summary {
   @apply
     px-5
@@ -94,6 +101,7 @@ const toggleTaskForm = (isOpened: boolean) => {
   grid-template: 1fr auto / 1fr;
   grid-template-areas:
     "caption actions"
+    "task-form task-form"
     "items items";
 }
 
@@ -107,6 +115,10 @@ const toggleTaskForm = (isOpened: boolean) => {
 
 .actions {
   grid-area: actions;
+}
+
+.task-form {
+  grid-area: task-form;
 }
 
 .items {

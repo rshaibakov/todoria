@@ -15,3 +15,8 @@ const app = createApp(App)
 app.use(pinia)
 app.use(router)
 app.mount('#app')
+
+app.config.errorHandler = (error) => {
+  // TODO: Доработать обработку ошибок и отправку отчетов в Sentry
+  console.error(error)
+}

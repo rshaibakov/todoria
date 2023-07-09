@@ -1,40 +1,53 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useTasksStore } from '../../../stores/tasks'
+import { computed, ref } from 'vue'
+import dayjs from 'dayjs'
+import { TTask, useTasksStore } from '../../../stores/tasks'
 
-const emit = defineEmits(['cancel', 'createdTask'])
+const props = defineProps<{ task?: TTask }>()
 
-const { createTaskByCurrentSprint } = useTasksStore()
+const emit = defineEmits(['cancel', 'submit'])
+
+const { createTaskByCurrentSprint, updateTask } = useTasksStore()
 
 const nameField = ref<HTMLInputElement | null>(null)
 const descriptionField = ref<HTMLTextAreaElement | null>(null)
 const dateField = ref<HTMLInputElement | null>(null)
+
+const taskPlannedAt = computed(() => props.task?.planned_at && dayjs(props.task?.planned_at).format('YYYY-MM-DD'))
 
 const onSubmit = async () => {
   if (!nameField.value) {
     return
   }
 
-  // TODO: Добавить обработку ошибок
-  await createTaskByCurrentSprint({
-    name: nameField.value.value,
-    description: descriptionField.value?.value,
-    planned_at: dateField.value?.value || null
-  })
+  emit('submit')
 
-  emit('createdTask')
+  if (props.task !== undefined) {
+    await updateTask(props.task.id, {
+      name: nameField.value.value,
+      description: descriptionField.value?.value,
+      planned_at: dateField.value?.value || null
+    })
+  } else {
+    await createTaskByCurrentSprint({
+      name: nameField.value.value,
+      description: descriptionField.value?.value,
+      planned_at: dateField.value?.value || null
+    })
+  }
 }
 </script>
 
 <template>
   <form
     class="form"
-    data-test-id="current-sprint-task-form"
+    data-test-id="task-form"
     @submit.prevent="onSubmit"
   >
     <input
       ref="nameField"
       class="text-field"
+      :value="props.task?.name || ''"
       type="text"
       placeholder="Название"
       required
@@ -43,29 +56,31 @@ const onSubmit = async () => {
     <textarea
       ref="descriptionField"
       class="text-field"
+      :value="props.task?.description || ''"
       placeholder="Описание"
     />
 
     <input
       ref="dateField"
       class="text-field"
-      data-test-id="current-sprint-planned-at-field"
+      data-test-id="task-form-planned-at-field"
+      :value="taskPlannedAt || ''"
       type="date"
     >
 
     <footer class="actions">
       <button
         class="button button-sm"
-        data-test-id="current-sprint-cancel-button"
+        data-test-id="task-form-cancel-button"
         type="button"
-        @click="emit('cancel')"
+        @click.stop="emit('cancel')"
       >
         Отмена
       </button>
 
       <button
         class="button button-sm button-primary"
-        data-test-id="current-sprint-submit-button"
+        data-test-id="task-form-submit-button"
         type="submit"
       >
         Добавить
