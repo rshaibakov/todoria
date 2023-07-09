@@ -36,10 +36,10 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "sprints_user_id_fkey"
-            columns: ["user_id"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            foreignKeyName: 'sprints_user_id_fkey'
+            columns: ['user_id']
+            referencedRelation: 'users'
+            referencedColumns: ['id']
           }
         ]
       }
@@ -76,16 +76,16 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "tasks_sprint_id_fkey"
-            columns: ["sprint_id"]
-            referencedRelation: "sprints"
-            referencedColumns: ["id"]
+            foreignKeyName: 'tasks_sprint_id_fkey'
+            columns: ['sprint_id']
+            referencedRelation: 'sprints'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "tasks_user_id_fkey"
-            columns: ["user_id"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            foreignKeyName: 'tasks_user_id_fkey'
+            columns: ['user_id']
+            referencedRelation: 'users'
+            referencedColumns: ['id']
           }
         ]
       }
