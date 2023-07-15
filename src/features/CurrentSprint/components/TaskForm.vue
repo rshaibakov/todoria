@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import dayjs from 'dayjs'
 import { TTask, useTasksStore } from '../../../stores/tasks'
+import { Dialog, DialogConfirm, TDialogRef } from '../../../components/Dialog'
 
 const props = defineProps<{ task?: TTask }>()
 const emit = defineEmits(['cancel', 'delete', 'submit'])
@@ -37,6 +38,17 @@ const onSubmit = async () => {
       planned_at: dateField.value?.value || null
     })
   }
+}
+
+const deleteConfirm = ref<TDialogRef>(null)
+
+const onDelete = async () => {
+  deleteConfirm.value?.dialog?.showModal()
+}
+
+const onCloseDeleteConfirm = async (event: Event) => {
+  const target = event.target as HTMLFormElement
+  console.log(target?.returnValue)
 }
 </script>
 
@@ -76,7 +88,7 @@ const onSubmit = async () => {
         class="button button-sm button-danger delete-button"
         data-test-id="task-form-delete-button"
         type="button"
-        @click.stop="emit('delete')"
+        @click.stop="onDelete"
       >
         Удалить
       </button>
@@ -98,6 +110,17 @@ const onSubmit = async () => {
         {{ isForUpdate ? 'Обновить' : 'Добавить' }}
       </button>
     </footer>
+
+    <Teleport to="body">
+      <Dialog
+        ref="deleteConfirm"
+        @close="onCloseDeleteConfirm"
+      >
+        <DialogConfirm>
+          Удалить задачу "{{ props.task?.name }}"?
+        </DialogConfirm>
+      </Dialog>
+    </Teleport>
   </form>
 </template>
 
