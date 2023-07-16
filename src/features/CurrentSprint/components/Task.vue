@@ -15,7 +15,10 @@ const taskPlannedAt = computed(() => props.task.planned_at && dayjs(props.task.p
 <template>
   <li
     class="task"
+    tabindex="0"
+    :aria-label="`Редактировать задачу ${props.task.name}`"
     @click="toggleTaskForm(true)"
+    @keypress.space="toggleTaskForm(true)"
   >
     <CurrentSprint.TaskForm
       v-if="hasOpenedTaskForm"
