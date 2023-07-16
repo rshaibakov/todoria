@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// TODO: Стандартизировать с компонентом диалога
 import { ref } from 'vue'
 import dayjs from 'dayjs'
 import { TTask, useTasksStore } from '../../../stores/tasks'
@@ -139,11 +140,11 @@ const onCloseDeleteConfirm = async (event: Event) => {
 .form {
   @apply
     px-4
-    py-4
+    py-3
     grid
     gap-4
     bg-white
-    rounded;
+    rounded-md;
 }
 
 .actions {

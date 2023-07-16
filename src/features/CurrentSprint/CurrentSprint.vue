@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// TODO: Переименовать в Sprint и переструктурировать файлы
 import { onBeforeMount, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useSprintsStore } from '../../stores/sprints'
