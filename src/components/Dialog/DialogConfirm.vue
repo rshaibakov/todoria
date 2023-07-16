@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { DIALOG_VALUES } from '.'
 import DialogHeader from './DialogHeader.vue'
 import DialogContent from './DialogContent.vue'
 import DialogFooter from './DialogFooter.vue'
@@ -35,7 +36,7 @@ const props = withDefaults(defineProps<{
         <button
           class="button button-sm button-danger"
           type="submit"
-          value="cancel"
+          :value="DIALOG_VALUES.CANCEL"
           autofocus
         >
           {{ props.cancelCaption }}
@@ -44,7 +45,7 @@ const props = withDefaults(defineProps<{
         <button
           class="button button-sm button-primary"
           type="submit"
-          value="confirm"
+          :value="DIALOG_VALUES.CONFIRM"
         >
           {{ props.confirmCaption }}
         </button>

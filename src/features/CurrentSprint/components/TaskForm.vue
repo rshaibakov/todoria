@@ -2,12 +2,12 @@
 import { ref } from 'vue'
 import dayjs from 'dayjs'
 import { TTask, useTasksStore } from '../../../stores/tasks'
-import { Dialog, DialogConfirm, TDialogRef } from '../../../components/Dialog'
+import { DIALOG_VALUES, Dialog, DialogConfirm, TDialogRef } from '../../../components/Dialog'
 
 const props = defineProps<{ task?: TTask }>()
 const emit = defineEmits(['cancel', 'delete', 'submit'])
 
-const { createTaskByCurrentSprint, updateTask } = useTasksStore()
+const { createTaskByCurrentSprint, updateTask, deleteTask } = useTasksStore()
 
 const nameField = ref<HTMLInputElement | null>(null)
 const descriptionField = ref<HTMLTextAreaElement | null>(null)
@@ -47,8 +47,15 @@ const onDelete = async () => {
 }
 
 const onCloseDeleteConfirm = async (event: Event) => {
+  if (!isForUpdate) {
+    return
+  }
+
   const target = event.target as HTMLFormElement
-  console.log(target?.returnValue)
+
+  if (target?.returnValue === DIALOG_VALUES.CONFIRM) {
+    await deleteTask(props.task.id)
+  }
 }
 </script>
 
