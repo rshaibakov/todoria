@@ -117,6 +117,10 @@ const onCloseDeleteConfirm = async (event: Event) => {
         @close="onCloseDeleteConfirm"
       >
         <DialogConfirm>
+          <template #title>
+            Удаление
+          </template>
+
           Удалить задачу "{{ props.task?.name }}"?
         </DialogConfirm>
       </Dialog>

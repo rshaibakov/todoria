@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import DialogHeader from './DialogHeader.vue'
+import DialogContent from './DialogContent.vue'
+import DialogFooter from './DialogFooter.vue'
+
 const props = withDefaults(defineProps<{
   message?: string,
   title?: string,
@@ -14,23 +18,22 @@ const props = withDefaults(defineProps<{
 
 <template>
   <form method="dialog">
-    <header v-if="props.title">
-      {{ title }}
-    </header>
+    <DialogHeader v-if="props.title || $slots.title">
+      <slot name="title">
+        {{ props.title }}
+      </slot>
+    </DialogHeader>
 
-    <article v-bind="$attrs">
-      <template v-if="$slots.default">
-        <slot />
-      </template>
-
-      <template v-else>
+    <DialogContent>
+      <slot>
         {{ props.message }}
-      </template>
-    </article>
+      </slot>
+    </DialogContent>
 
-    <footer>
-      <menu>
+    <DialogFooter>
+      <menu class="actions">
         <button
+          class="button button-sm button-danger"
           type="submit"
           value="cancel"
           autofocus
@@ -39,12 +42,25 @@ const props = withDefaults(defineProps<{
         </button>
 
         <button
+          class="button button-sm button-primary"
           type="submit"
           value="confirm"
         >
           {{ props.confirmCaption }}
         </button>
       </menu>
-    </footer>
+    </DialogFooter>
   </form>
 </template>
+
+<style scoped>
+.actions {
+  @apply
+    grid
+    items-center
+    justify-end
+    gap-2;
+
+  grid-template-columns: auto auto;
+}
+</style>
