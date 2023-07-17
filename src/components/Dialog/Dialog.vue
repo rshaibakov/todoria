@@ -6,12 +6,21 @@ const dialog = ref<HTMLDialogElement | null>(null)
 defineExpose({
   dialog
 })
+
+const onClick = (event: Event) => {
+  const target = event.target as HTMLElement
+
+  if (target?.nodeName === 'DIALOG') {
+    dialog.value?.close()
+  }
+}
 </script>
 
 <template>
   <dialog
     ref="dialog"
     class="dialog"
+    @click="onClick"
   >
     <slot />
   </dialog>
