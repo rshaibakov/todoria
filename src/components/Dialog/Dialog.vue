@@ -31,6 +31,7 @@ const onClick = (event: Event) => {
   @apply
     p-0
     rounded-md
+    shadow-lg
     text-base;
 
   width: 480px;
