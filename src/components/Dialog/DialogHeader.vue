@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DIALOG_VALUES } from '.'
-import IconClose from '@/assets/icons/close.svg'
+import Icon from '@/components/Icon'
 </script>
 
 <template>
@@ -14,7 +14,10 @@ import IconClose from '@/assets/icons/close.svg'
       type="submit"
       :value="DIALOG_VALUES.CANCEL"
     >
-      <IconClose class="icon-close" />
+      <Icon
+        class="icon-close"
+        glyph="close"
+      />
     </button>
   </header>
 </template>
