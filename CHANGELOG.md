@@ -1,3 +1,22 @@
+# [1.4.0](https://github.com/rshaibakov/todoria/compare/v1.3.0...v1.4.0) (2023-07-20)
+
+
+### Bug Fixes
+
+* **taskForm:** paddings ([9465750](https://github.com/rshaibakov/todoria/commit/9465750c6aaddad8522b093a2fc87fba228d8e62))
+
+
+### Features
+
+* **button:** add red style button ([aa995b9](https://github.com/rshaibakov/todoria/commit/aa995b93ca5f2857c787d4f2cad041647e23fdb1))
+* **dialog:** add box shadow ([b006fd6](https://github.com/rshaibakov/todoria/commit/b006fd6f62851d0904c4c76f8cca2e265dc8bc6d))
+* **dialog:** add close when click outside ([2165240](https://github.com/rshaibakov/todoria/commit/2165240827a919d202336f9738c66e12b791f7db))
+* **dialog:** add component ([41b6055](https://github.com/rshaibakov/todoria/commit/41b60551d1b6bf6bc313c660b43b407c3a773c1b))
+* **dialog:** add style and decompose ([b22ad72](https://github.com/rshaibakov/todoria/commit/b22ad723be4b324eeb911235c10046eba4fe9244))
+* **task:** add accessability ([28a2a69](https://github.com/rshaibakov/todoria/commit/28a2a69e3eecc996f70b8540ab088cf844cde3d2))
+* **task:** add deleting ([b37af86](https://github.com/rshaibakov/todoria/commit/b37af861245ad3a40218d292c26963d2b8723914))
+* **taskForm:** add remove button ([2456f21](https://github.com/rshaibakov/todoria/commit/2456f2156cc2bb941985cf146b09a3718e8871e5))
+
 # [1.3.0](https://github.com/rshaibakov/todoria/compare/v1.2.0...v1.3.0) (2023-07-09)
 
 
