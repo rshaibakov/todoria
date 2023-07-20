@@ -113,11 +113,30 @@ export const useTasksStore = defineStore('tasks', () => {
     return 0
   }
 
+  const deleteTask = async (taskId: TTaskPayloadByUpdate['id']) => {
+    const currentTaskIndex = tasks.value.findIndex(task => task.id === taskId)
+    const currentTask = tasks.value[currentTaskIndex]
+
+    tasks.value.splice(currentTaskIndex, 1)
+
+    const { error } = await supabase
+      .from('tasks')
+      .delete()
+      .eq('id', taskId)
+
+    if (error !== null) {
+      tasks.value.splice(currentTaskIndex, 1, currentTask)
+
+      throw Error(error.message)
+    }
+  }
+
   return {
     tasks,
     fetchTasksBySprint,
     createTask,
     createTaskByCurrentSprint,
-    updateTask
+    updateTask,
+    deleteTask
   }
 })

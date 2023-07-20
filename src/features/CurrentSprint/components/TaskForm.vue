@@ -1,19 +1,23 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+// TODO: Стандартизировать с компонентом диалога
+import { ref } from 'vue'
 import dayjs from 'dayjs'
 import { TTask, useTasksStore } from '../../../stores/tasks'
+import { DIALOG_VALUES, Dialog, DialogConfirm, TDialogRef } from '../../../components/Dialog'
 
 const props = defineProps<{ task?: TTask }>()
+const emit = defineEmits(['cancel', 'delete', 'submit'])
 
-const emit = defineEmits(['cancel', 'submit'])
-
-const { createTaskByCurrentSprint, updateTask } = useTasksStore()
+const { createTaskByCurrentSprint, updateTask, deleteTask } = useTasksStore()
 
 const nameField = ref<HTMLInputElement | null>(null)
 const descriptionField = ref<HTMLTextAreaElement | null>(null)
 const dateField = ref<HTMLInputElement | null>(null)
 
-const taskPlannedAt = computed(() => props.task?.planned_at && dayjs(props.task?.planned_at).format('YYYY-MM-DD'))
+const isForUpdate = props.task !== undefined
+const taskPlannedAt = isForUpdate
+  ? props.task.planned_at && dayjs(props.task?.planned_at).format('YYYY-MM-DD')
+  : ''
 
 const onSubmit = async () => {
   if (!nameField.value) {
@@ -22,7 +26,7 @@ const onSubmit = async () => {
 
   emit('submit')
 
-  if (props.task !== undefined) {
+  if (isForUpdate) {
     await updateTask(props.task.id, {
       name: nameField.value.value,
       description: descriptionField.value?.value,
@@ -34,6 +38,24 @@ const onSubmit = async () => {
       description: descriptionField.value?.value,
       planned_at: dateField.value?.value || null
     })
+  }
+}
+
+const deleteConfirm = ref<TDialogRef>(null)
+
+const onDelete = async () => {
+  deleteConfirm.value?.dialog?.showModal()
+}
+
+const onCloseDeleteConfirm = async (event: Event) => {
+  if (!isForUpdate) {
+    return
+  }
+
+  const target = event.target as HTMLFormElement
+
+  if (target?.returnValue === DIALOG_VALUES.CONFIRM) {
+    await deleteTask(props.task.id)
   }
 }
 </script>
@@ -64,13 +86,23 @@ const onSubmit = async () => {
       ref="dateField"
       class="text-field"
       data-test-id="task-form-planned-at-field"
-      :value="taskPlannedAt || ''"
+      :value="taskPlannedAt"
       type="date"
     >
 
     <footer class="actions">
       <button
-        class="button button-sm"
+        v-if="isForUpdate"
+        class="button button-sm button-danger delete-button"
+        data-test-id="task-form-delete-button"
+        type="button"
+        @click.stop="onDelete"
+      >
+        Удалить
+      </button>
+
+      <button
+        class="button button-sm cancel-button"
         data-test-id="task-form-cancel-button"
         type="button"
         @click.stop="emit('cancel')"
@@ -79,13 +111,28 @@ const onSubmit = async () => {
       </button>
 
       <button
-        class="button button-sm button-primary"
+        class="button button-sm button-primary save-button"
         data-test-id="task-form-submit-button"
         type="submit"
       >
-        Добавить
+        {{ isForUpdate ? 'Обновить' : 'Добавить' }}
       </button>
     </footer>
+
+    <Teleport to="body">
+      <Dialog
+        ref="deleteConfirm"
+        @close="onCloseDeleteConfirm"
+      >
+        <DialogConfirm>
+          <template #title>
+            Удаление
+          </template>
+
+          Удалить задачу "{{ props.task?.name }}"?
+        </DialogConfirm>
+      </Dialog>
+    </Teleport>
   </form>
 </template>
 
@@ -93,16 +140,29 @@ const onSubmit = async () => {
 .form {
   @apply
     px-4
-    py-4
+    py-3
     grid
     gap-4
     bg-white
-    rounded;
+    rounded-md;
 }
 
 .actions {
   @apply
-    flex
-    justify-end;
+    grid;
+
+  grid-template-columns: [one] 1fr [two] 1fr [three] 1fr [four] 1fr [five];
+}
+
+.delete-button {
+  grid-column: one / span two;
+}
+
+.cancel-button {
+  grid-column: three / span four;
+}
+
+.save-button {
+  grid-column: four / span five;
 }
 </style>
