@@ -18,7 +18,10 @@ const props = withDefaults(defineProps<{
 </script>
 
 <template>
-  <form method="dialog">
+  <form
+    data-test-id="dialog-confirm"
+    method="dialog"
+  >
     <DialogHeader v-if="props.title || $slots.title">
       <slot name="title">
         {{ props.title }}
@@ -35,6 +38,7 @@ const props = withDefaults(defineProps<{
       <menu class="actions">
         <button
           class="button button-sm button-danger"
+          data-test-id="dialog-cancel-button"
           type="submit"
           :value="DIALOG_VALUES.CANCEL"
           autofocus
@@ -44,6 +48,7 @@ const props = withDefaults(defineProps<{
 
         <button
           class="button button-sm button-primary"
+          data-test-id="dialog-confirm-button"
           type="submit"
           :value="DIALOG_VALUES.CONFIRM"
         >
